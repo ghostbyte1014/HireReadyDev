@@ -12,16 +12,23 @@ export function FeedbackModal({ onClose, theme }) {
   // WEB3FORMS ACCESS KEY
   const ACCESS_KEY = "f75234fa-7659-4666-b357-60a921c93659";
 
+  const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!message.trim()) return;
 
-    // Check 5-minute cooldown in LocalStorage
+    // Check 1-week cooldown in LocalStorage to preserve Web3Forms quota
     const lastSent = localStorage.getItem('hireready_last_feedback_time');
-    if (lastSent && Date.now() - parseInt(lastSent, 10) < 5 * 60 * 1000) {
-      setStatus('error');
-      setErrorMessage('Please wait 5 minutes before sending another message.');
-      return;
+    if (lastSent) {
+      const elapsed = Date.now() - parseInt(lastSent, 10);
+      if (elapsed < ONE_WEEK_MS) {
+        const remainingMs = ONE_WEEK_MS - elapsed;
+        const remainingDays = Math.ceil(remainingMs / (24 * 60 * 60 * 1000));
+        setStatus('error');
+        setErrorMessage(`To preserve feedback quota, submissions are limited to 1 per week. You can submit again in ${remainingDays} day${remainingDays > 1 ? 's' : ''}.`);
+        return;
+      }
     }
 
     setStatus('sending');
@@ -108,7 +115,7 @@ export function FeedbackModal({ onClose, theme }) {
               Send Feedback to Author
             </h2>
             <div style={{ fontSize: 11, color: isDark ? '#9CA3AF' : '#5B5A52' }}>
-              Created by <strong>ghostbyte</strong>
+              Created by <strong>ghostbyte</strong> &bull; <em>1 submission per week per user</em>
             </div>
           </div>
         </div>
