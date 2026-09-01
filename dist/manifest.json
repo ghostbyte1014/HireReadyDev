@@ -1,0 +1,21 @@
+{
+  "name": "HireReady Dev",
+  "short_name": "HireReady",
+  "description": "HireReady Dev — The Developer's IT Compendium & Interview Masterclass PWA",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#EDE9DE",
+  "theme_color": "#22262B",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
