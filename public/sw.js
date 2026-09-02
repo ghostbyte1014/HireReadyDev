@@ -1,4 +1,4 @@
-const CACHE_NAME = 'hireready-dev-v2';
+const CACHE_NAME = 'hireready-dev-v3';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -38,25 +38,21 @@ self.addEventListener('message', (event) => {
   }
 });
 
-// Fetch Event - Network-First for Navigation, Stale-While-Revalidate for Assets
+// Fetch Event - Network-First for Navigation
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      const fetchPromise = fetch(event.request).then((networkResponse) => {
-        if (networkResponse && networkResponse.status === 200) {
-          const responseToCache = networkResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
-          });
-        }
-        return networkResponse;
-      }).catch(() => {
-        return cachedResponse;
-      });
-
-      return cachedResponse || fetchPromise;
+    fetch(event.request).then((networkResponse) => {
+      if (networkResponse && networkResponse.status === 200) {
+        const responseToCache = networkResponse.clone();
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, responseToCache);
+        });
+      }
+      return networkResponse;
+    }).catch(() => {
+      return caches.match(event.request);
     })
   );
 });

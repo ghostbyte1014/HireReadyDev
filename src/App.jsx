@@ -9,6 +9,7 @@ import { PdfPreviewModal } from './components/PdfPreviewModal';
 import { MobileBottomNav } from './components/MobileBottomNav';
 import { FeedbackModal } from './components/FeedbackModal';
 import { AtsResumeModal } from './components/AtsResumeModal';
+import { InstallConfirmationModal } from './components/InstallConfirmationModal';
 
 import { DOMAINS, ALL_GUIDE_ENTRIES } from './data/guide/index.js';
 import { INTERVIEW_QUESTIONS } from './data/interview/index.js';
@@ -21,15 +22,37 @@ export function App() {
   const [showPdfPreviewModal, setShowPdfPreviewModal] = useState(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [showAtsResumeModal, setShowAtsResumeModal] = useState(false);
+  const [showInstallConfirmModal, setShowInstallConfirmModal] = useState(false);
 
-  // Theme State: 'warm' | 'dark'
+  // Theme State: 'warm' | 'dark' (Follows OS system theme automatically if not manually overridden)
   const [theme, setTheme] = useState(() => {
     try {
-      return localStorage.getItem('hireready_theme') || 'warm';
+      const saved = localStorage.getItem('hireready_theme');
+      if (saved) return saved;
+      if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+      }
+      return 'warm';
     } catch {
       return 'warm';
     }
   });
+
+  // Listen to OS system color-scheme changes automatically
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return;
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleSystemThemeChange = (e) => {
+      const saved = localStorage.getItem('hireready_theme');
+      if (!saved) {
+        setTheme(e.matches ? 'dark' : 'warm');
+      }
+    };
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', handleSystemThemeChange);
+      return () => mediaQuery.removeEventListener('change', handleSystemThemeChange);
+    }
+  }, []);
 
   // Guide State
   const [query, setQuery] = useState('');
@@ -122,14 +145,22 @@ export function App() {
     return () => window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
   }, []);
 
-  const handleInstallClick = () => {
-    if (!installPrompt) return;
-    installPrompt.prompt();
-    installPrompt.userChoice.then((choice) => {
-      if (choice.outcome === 'accepted') {
-        setInstallPrompt(null);
-      }
-    });
+  const triggerInstallFlow = () => {
+    setShowInstallConfirmModal(true);
+  };
+
+  const handleConfirmInstall = () => {
+    setShowInstallConfirmModal(false);
+    if (installPrompt) {
+      installPrompt.prompt();
+      installPrompt.userChoice.then((choice) => {
+        if (choice.outcome === 'accepted') {
+          setInstallPrompt(null);
+        }
+      });
+    } else {
+      alert("📲 To install HireReady Dev:\n• Chrome/Edge: Click the Install button in your address bar or browser menu.\n• iOS Safari: Tap Share (↑) -> 'Add to Home Screen'.");
+    }
   };
 
   // Timer Tick Effect
@@ -400,7 +431,7 @@ export function App() {
         totalQACount={INTERVIEW_QUESTIONS.length}
         masteredCount={masteredCount}
         installPrompt={installPrompt}
-        handleInstallClick={handleInstallClick}
+        handleInstallClick={triggerInstallFlow}
         onHomeClick={onHomeClick}
         setIsMobileOpen={setIsMobileOpen}
         theme={theme}
@@ -446,9 +477,10 @@ export function App() {
                 setActiveMode={setActiveMode}
                 setSelectedTermKey={handleSelectTerm}
                 setSelectedQAId={handleSelectQA}
-                handleInstallClick={handleInstallClick}
+                handleInstallClick={triggerInstallFlow}
                 installPrompt={installPrompt}
                 theme={theme}
+                onOpenAtsResume={() => setShowAtsResumeModal(true)}
               />
             )}
 
@@ -537,6 +569,16 @@ export function App() {
       {showAtsResumeModal && (
         <AtsResumeModal
           onClose={() => setShowAtsResumeModal(false)}
+          theme={theme}
+        />
+      )}
+
+      {/* INSTALL CONFIRMATION MODAL */}
+      {showInstallConfirmModal && (
+        <InstallConfirmationModal
+          onClose={() => setShowInstallConfirmModal(false)}
+          onConfirm={handleConfirmInstall}
+          installPrompt={installPrompt}
           theme={theme}
         />
       )}
