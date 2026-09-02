@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BookOpen, HelpCircle, Download, Github, Wifi, WifiOff, Shield, RefreshCw, Menu, CheckCircle2, Moon, Sun, FileText, MessageSquare } from 'lucide-react';
+import { BookOpen, HelpCircle, Download, Github, Wifi, WifiOff, Shield, RefreshCw, Menu, CheckCircle2, Moon, Sun, FileText, MessageSquare, UserCheck } from 'lucide-react';
 
 export function Header({
   activeMode,
@@ -14,7 +14,8 @@ export function Header({
   theme,
   toggleTheme,
   handlePrintStudySheet,
-  onOpenFeedback
+  onOpenFeedback,
+  onOpenAtsResume
 }) {
   const [isOnline, setIsOnline] = useState(() => (typeof navigator !== 'undefined' ? navigator.onLine : true));
   const [showInstallHelp, setShowInstallHelp] = useState(false);
@@ -197,6 +198,27 @@ export function Header({
 
         {/* Responsive Mode Switcher & Action Buttons */}
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
+          {/* ATS RESUME BUTTON */}
+          <button
+            onClick={onOpenAtsResume}
+            title="Open 1-Column ATS Resume Builder & Masterclass"
+            style={{
+              padding: "6px 9px",
+              borderRadius: 6,
+              background: isDark ? "#065F46" : "#D1FAE5",
+              color: isDark ? "#A7F3D0" : "#065F46",
+              border: `1px solid ${isDark ? "#047857" : "#6EE7B7"}`,
+              fontWeight: 700,
+              fontSize: 12,
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: 4
+            }}
+          >
+            <UserCheck size={13} /> ATS Resume
+          </button>
+
           {/* FEEDBACK BUTTON */}
           <button
             onClick={onOpenFeedback}

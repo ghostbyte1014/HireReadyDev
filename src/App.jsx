@@ -8,6 +8,7 @@ import { Footer } from './components/Footer';
 import { PdfPreviewModal } from './components/PdfPreviewModal';
 import { MobileBottomNav } from './components/MobileBottomNav';
 import { FeedbackModal } from './components/FeedbackModal';
+import { AtsResumeModal } from './components/AtsResumeModal';
 
 import { DOMAINS, ALL_GUIDE_ENTRIES } from './data/guide/index.js';
 import { INTERVIEW_QUESTIONS } from './data/interview/index.js';
@@ -19,6 +20,7 @@ export function App() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [showPdfPreviewModal, setShowPdfPreviewModal] = useState(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [showAtsResumeModal, setShowAtsResumeModal] = useState(false);
 
   // Theme State: 'warm' | 'dark'
   const [theme, setTheme] = useState(() => {
@@ -405,6 +407,7 @@ export function App() {
         toggleTheme={toggleTheme}
         handlePrintStudySheet={handleOpenPdfPreview}
         onOpenFeedback={() => setShowFeedbackModal(true)}
+        onOpenAtsResume={() => setShowAtsResumeModal(true)}
       />
 
       {/* MAIN CONTAINER */}
@@ -483,6 +486,7 @@ export function App() {
                 userNotes={userNotes}
                 handleSaveUserNote={handleSaveUserNote}
                 theme={theme}
+                onOpenAtsResume={() => setShowAtsResumeModal(true)}
               />
             )}
           </div>
@@ -503,6 +507,7 @@ export function App() {
         onHomeClick={onHomeClick}
         setIsMobileOpen={setIsMobileOpen}
         handlePrintStudySheet={handleOpenPdfPreview}
+        onOpenAtsResume={() => setShowAtsResumeModal(true)}
         theme={theme}
       />
 
@@ -524,6 +529,14 @@ export function App() {
       {showFeedbackModal && (
         <FeedbackModal
           onClose={() => setShowFeedbackModal(false)}
+          theme={theme}
+        />
+      )}
+
+      {/* ATS RESUME BUILDER & MASTERCLASS MODAL */}
+      {showAtsResumeModal && (
+        <AtsResumeModal
+          onClose={() => setShowAtsResumeModal(false)}
           theme={theme}
         />
       )}

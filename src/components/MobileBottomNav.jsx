@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Menu, BookOpen, HelpCircle, FileText } from 'lucide-react';
+import { Home, Menu, BookOpen, HelpCircle, UserCheck } from 'lucide-react';
 
 export function MobileBottomNav({
   activeMode,
@@ -7,6 +7,7 @@ export function MobileBottomNav({
   onHomeClick,
   setIsMobileOpen,
   handlePrintStudySheet,
+  onOpenAtsResume,
   theme
 }) {
   const isDark = theme === 'dark';
@@ -110,27 +111,25 @@ export function MobileBottomNav({
         <span>Practice</span>
       </button>
 
-      {/* 5. SAVE PDF TAB (Hidden on Home) */}
-      {activeMode !== 'home' && (
-        <button
-          onClick={handlePrintStudySheet}
-          style={{
-            border: "none",
-            background: "transparent",
-            color: isDark ? '#93C5FD' : '#1D4ED8',
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: 3,
-            fontSize: 10,
-            fontWeight: 600,
-            cursor: "pointer"
-          }}
-        >
-          <FileText size={18} color={isDark ? '#93C5FD' : '#1D4ED8'} />
-          <span>Save PDF</span>
-        </button>
-      )}
+      {/* 5. ATS RESUME TAB */}
+      <button
+        onClick={onOpenAtsResume}
+        style={{
+          border: "none",
+          background: "transparent",
+          color: isDark ? '#A7F3D0' : '#065F46',
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 3,
+          fontSize: 10,
+          fontWeight: 700,
+          cursor: "pointer"
+        }}
+      >
+        <UserCheck size={18} color={isDark ? '#A7F3D0' : '#065F46'} />
+        <span>ATS CV</span>
+      </button>
     </nav>
   );
 }
