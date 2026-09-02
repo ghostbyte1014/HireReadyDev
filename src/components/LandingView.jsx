@@ -68,8 +68,8 @@ export function LandingView({ setActiveMode, setSelectedTermKey, setSelectedQAId
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-            <span style={{ fontSize: 10.5, fontWeight: 700, background: "#33417A", color: "#F8F5EE", padding: "2px 8px", borderRadius: 4, textTransform: "uppercase", letterSpacing: 0.5 }}>
-              WELCOME TO
+            <span style={{ fontSize: 10.5, fontWeight: 700, background: "#059669", color: "#F8F5EE", padding: "2px 8px", borderRadius: 4, textTransform: "uppercase", letterSpacing: 0.5 }}>
+              v1.0.9 — Sep 2026
             </span>
             <a
               href="https://github.com/ghostbyte1014"

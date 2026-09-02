@@ -24,7 +24,7 @@ export function Footer({ theme, handleExportBackup, handleImportBackup, onRestar
         boxSizing: "border-box"
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
         <span><strong>HireReady Dev</strong> — <em>The Developer's IT Compendium</em> | Created by</span>
         <a
           href="https://github.com/ghostbyte1014"
@@ -46,6 +46,9 @@ export function Footer({ theme, handleExportBackup, handleImportBackup, onRestar
           <Github size={13} color={isDark ? '#EDE9DE' : '#22262B'} />
           <span>ghostbyte</span>
         </a>
+        <span style={{ fontSize: 10, fontWeight: 700, background: isDark ? '#064E3B' : '#D1FAE5', color: isDark ? '#A7F3D0' : '#065F46', padding: "2px 8px", borderRadius: 4, border: `1px solid ${isDark ? '#047857' : '#A7F3D0'}` }}>
+          v1.0.9 &bull; Sep 2026
+        </span>
       </div>
 
       <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
