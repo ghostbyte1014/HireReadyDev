@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BookOpen, Info, X, Github, Download, Upload } from 'lucide-react';
 
-export function Footer({ theme, handleExportBackup, handleImportBackup }) {
+export function Footer({ theme, handleExportBackup, handleImportBackup, onRestartTutorial }) {
   const [showModal, setShowModal] = useState(false);
 
   const isDark = theme === 'dark';
@@ -269,6 +269,36 @@ export function Footer({ theme, handleExportBackup, handleImportBackup }) {
                 </p>
               </div>
 
+              {/* SECTION 4: RESTART APP TUTORIAL TRIGGER */}
+              {onRestartTutorial && (
+                <div style={{ marginBottom: 14, paddingTop: 12, borderTop: `1px solid ${isDark ? '#374151' : '#CFC7B0'}`, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
+                  <div style={{ fontSize: 11.5, color: isDark ? '#9CA3AF' : '#5B5A52' }}>
+                    Need a refresher on all HireReady Dev features?
+                  </div>
+                  <button
+                    onClick={() => {
+                      setShowModal(false);
+                      onRestartTutorial();
+                    }}
+                    style={{
+                      padding: "6px 12px",
+                      borderRadius: 5,
+                      background: isDark ? '#065F46' : '#D1FAE5',
+                      color: isDark ? '#A7F3D0' : '#065F46',
+                      border: `1px solid ${isDark ? '#047857' : '#A7F3D0'}`,
+                      fontSize: 11.5,
+                      fontWeight: 700,
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 4
+                    }}
+                  >
+                    <BookOpen size={13} /> Restart App Tour
+                  </button>
+                </div>
+              )}
+
               <button
                 onClick={() => setShowModal(false)}
                 style={{
@@ -281,7 +311,7 @@ export function Footer({ theme, handleExportBackup, handleImportBackup }) {
                   fontWeight: 600,
                   fontSize: 12.5,
                   cursor: "pointer",
-                  marginTop: 8
+                  marginTop: 4
                 }}
               >
                 Close

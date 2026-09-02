@@ -10,6 +10,7 @@ import { MobileBottomNav } from './components/MobileBottomNav';
 import { FeedbackModal } from './components/FeedbackModal';
 import { AtsResumeModal } from './components/AtsResumeModal';
 import { InstallConfirmationModal } from './components/InstallConfirmationModal';
+import { OnboardingTutorialModal } from './components/OnboardingTutorialModal';
 
 import { DOMAINS, ALL_GUIDE_ENTRIES } from './data/guide/index.js';
 import { INTERVIEW_QUESTIONS } from './data/interview/index.js';
@@ -24,35 +25,26 @@ export function App() {
   const [showAtsResumeModal, setShowAtsResumeModal] = useState(false);
   const [showInstallConfirmModal, setShowInstallConfirmModal] = useState(false);
 
-  // Theme State: 'warm' | 'dark' (Follows OS system theme automatically if not manually overridden)
+  // First-Time User Detection & Onboarding Tutorial State
+  const [showTutorialModal, setShowTutorialModal] = useState(() => {
+    try {
+      const hasSeen = localStorage.getItem('hireready_has_seen_tutorial');
+      return !hasSeen; // Traces if user is new!
+    } catch {
+      return false;
+    }
+  });
+
+  // Theme State: 'dark' (Default first) | 'warm'
   const [theme, setTheme] = useState(() => {
     try {
       const saved = localStorage.getItem('hireready_theme');
       if (saved) return saved;
-      if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        return 'dark';
-      }
-      return 'warm';
+      return 'dark'; // Default to Dark Theme first!
     } catch {
-      return 'warm';
+      return 'dark';
     }
   });
-
-  // Listen to OS system color-scheme changes automatically
-  useEffect(() => {
-    if (typeof window === 'undefined' || !window.matchMedia) return;
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleSystemThemeChange = (e) => {
-      const saved = localStorage.getItem('hireready_theme');
-      if (!saved) {
-        setTheme(e.matches ? 'dark' : 'warm');
-      }
-    };
-    if (mediaQuery.addEventListener) {
-      mediaQuery.addEventListener('change', handleSystemThemeChange);
-      return () => mediaQuery.removeEventListener('change', handleSystemThemeChange);
-    }
-  }, []);
 
   // Guide State
   const [query, setQuery] = useState('');
@@ -161,6 +153,19 @@ export function App() {
     } else {
       alert("📲 To install HireReady Dev:\n• Chrome/Edge: Click the Install button in your address bar or browser menu.\n• iOS Safari: Tap Share (↑) -> 'Add to Home Screen'.");
     }
+  };
+
+  const handleCompleteTutorial = () => {
+    try {
+      localStorage.setItem('hireready_has_seen_tutorial', 'true');
+    } catch (e) {
+      console.error(e);
+    }
+    setShowTutorialModal(false);
+  };
+
+  const handleRestartTutorial = () => {
+    setShowTutorialModal(true);
   };
 
   // Timer Tick Effect
@@ -530,6 +535,7 @@ export function App() {
         theme={theme}
         handleExportBackup={handleExportBackup}
         handleImportBackup={handleImportBackup}
+        onRestartTutorial={handleRestartTutorial}
       />
 
       {/* STICKY MOBILE BOTTOM QUICK ACTION NAVIGATION BAR */}
@@ -579,6 +585,15 @@ export function App() {
           onClose={() => setShowInstallConfirmModal(false)}
           onConfirm={handleConfirmInstall}
           installPrompt={installPrompt}
+          theme={theme}
+        />
+      )}
+
+      {/* ONBOARDING TUTORIAL WIZARD MODAL */}
+      {showTutorialModal && (
+        <OnboardingTutorialModal
+          onClose={() => setShowTutorialModal(false)}
+          onComplete={handleCompleteTutorial}
           theme={theme}
         />
       )}

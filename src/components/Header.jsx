@@ -106,7 +106,7 @@ export function Header({
           <div style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }} onClick={onHomeClick}>
             {!imgError ? (
               <img
-                src="/icon-192.png?v=2"
+                src="/icon-192.png?v=3"
                 alt="HireReady Dev Logo"
                 onError={() => setImgError(true)}
                 style={{
@@ -198,9 +198,10 @@ export function Header({
 
         {/* Responsive Mode Switcher & Action Buttons */}
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
-          {/* ATS RESUME BUTTON */}
+          {/* ATS RESUME BUTTON (Desktop only - Mobile has bottom nav tab) */}
           <button
             onClick={onOpenAtsResume}
+            className="fg-desktop-only"
             title="Open 1-Column ATS Resume Builder & Masterclass"
             style={{
               padding: "6px 9px",
@@ -211,7 +212,7 @@ export function Header({
               fontWeight: 700,
               fontSize: 12,
               cursor: "pointer",
-              display: "flex",
+              display: "inline-flex",
               alignItems: "center",
               gap: 4
             }}
@@ -260,7 +261,7 @@ export function Header({
             }}
           >
             {isDark ? <Sun size={13} /> : <Moon size={13} />}
-            {isDark ? "Warm Mode" : "Dark Mode"}
+            {isDark ? "Warm" : "Dark"}
           </button>
 
           {/* SAVE TOPIC AS PDF BUTTON (Hidden on Home Landing Page) */}
@@ -286,9 +287,10 @@ export function Header({
             </button>
           )}
 
+          {/* INSTALL APP BUTTON (Desktop only - Mobile has dashboard stat card) */}
           <button
             onClick={onInstallBtnClick}
-            className="mode-tab"
+            className="fg-desktop-only mode-tab"
             style={{ background: "#059669", color: "#FFF", border: "1px solid #047857", padding: "6px 10px", fontSize: 12 }}
           >
             <Download size={14} /> Install App
@@ -315,9 +317,10 @@ export function Header({
             Sync
           </button>
 
+          {/* MODE SWITCHER TABS (Desktop only - Mobile has bottom nav bar) */}
           <button
             onClick={() => setActiveMode("guide")}
-            className={`mode-tab ${activeMode === "guide" ? "mode-tab-active" : "mode-tab-inactive"}`}
+            className={`fg-desktop-only mode-tab ${activeMode === "guide" ? "mode-tab-active" : "mode-tab-inactive"}`}
             style={{ padding: "6px 10px", fontSize: 12 }}
           >
             <BookOpen size={14} />
@@ -326,7 +329,7 @@ export function Header({
 
           <button
             onClick={() => setActiveMode("interview")}
-            className={`mode-tab ${activeMode === "interview" ? "mode-tab-active" : "mode-tab-inactive"}`}
+            className={`fg-desktop-only mode-tab ${activeMode === "interview" ? "mode-tab-active" : "mode-tab-inactive"}`}
             style={{ padding: "6px 10px", fontSize: 12 }}
           >
             <HelpCircle size={14} />
