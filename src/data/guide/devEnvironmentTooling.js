@@ -3,6 +3,96 @@ export const devEnvironmentToolingDomain = {
   color: "#475569",
   entries: [
     {
+      term: "Agentic AI Coding Platforms & IDEs",
+      slug: "agentic-ai-coding-platforms-ides",
+      meaning: "Next-generation IDEs and CLI agents that use LLM codebase indexing to autonomously inspect files, write multi-file edits, and run terminal commands.",
+      purpose: "Accelerate software engineering velocity with autonomous multi-file edits and terminal command execution.",
+      starter: {
+        summary: "Cursor AI & Windsurf (AI-native IDE forks), Antigravity & Claude Code / agy CLI (terminal agentic coding assistants), Copilot & Supermaven (inline autocomplete).",
+        coreConcept: "Codebase-wide vector indexing + agentic tool execution loop.",
+        quickExample: "Cmd+K / Composer -> 'Add OAuth 2.0 PKCE authentication flow across backend and frontend'"
+      },
+      deeper: {
+        tradeoffs: "Agentic IDEs eliminate tedious boilerplate writing and refactoring; however, developers MUST review generated code diffs carefully for subtle logic bugs or security leaks.",
+        edgeCases: "Stale vector index caches causing AI agents to reference deleted function signatures."
+      },
+      functions: [
+        "🚦 Decision Matrix: Use Cursor/Windsurf for multi-file codebase refactoring; use Copilot/Supermaven for fast sub-100ms inline line completions; use Antigravity/Claude Code CLI for terminal-driven autonomous execution.",
+        "💣 Production Gotcha: Blindly accepting large multi-file agentic code generation without running tests can introduce hidden breaking changes in untested edge cases.",
+        "Cursor AI — VS Code fork featuring @codebase semantic vector search, Cmd+K inline editing, and Composer multi-file agentic generation",
+        "Windsurf (Codeium Cascade) — AI-native IDE with deep execution state awareness and multi-file cascade editing",
+        "Antigravity & Claude Code / agy CLI — Terminal agentic coding assistants executing shell commands, file edits, subagent orchestration, and browser verification",
+        "GitHub Copilot & Supermaven — High-speed sub-100ms inline autocomplete extensions powered by specialized LLMs",
+        "Devin & Cognition AI — Autonomous AI software engineer platform resolving end-to-end GitHub issues autonomously",
+        "Zed & Neovim — High-performance Rust-written modal editors with native Language Server Protocol (LSP) and AI integration"
+      ],
+      objectives: [
+        "Configure `@codebase` indexing and `.cursorignore` files to exclude secrets and heavy build directories from AI context",
+        "Utilize terminal agentic CLIs to automate multi-file bug fixes and unit test generation"
+      ],
+      keyPoints: [
+        "Cursor's `@codebase` indexes your entire repository into vector embeddings for accurate context retrieval",
+        "Supermaven delivers 250,000+ token context windows at sub-100ms autocomplete speeds"
+      ],
+      examples: [
+        { isCode: true, language: "json", text: "// .cursorignore / .gitignore\nnode_modules/\ndist/\n.env*\n*.log" }
+      ],
+      sources: [
+        { label: "Cursor AI Docs", url: "https://docs.cursor.com/", type: "Official Docs" },
+        { label: "Windsurf IDE", url: "https://codeium.com/windsurf", type: "Official Site" },
+        { label: "Antigravity Agentic Platform", url: "https://antigravity.google.com/", type: "Official Docs" },
+        { label: "Claude Code CLI Docs", url: "https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/overview", type: "Official Docs" },
+        { label: "GitHub Copilot Documentation", url: "https://docs.github.com/en/copilot", type: "Official Docs" },
+        { label: "Supermaven Autocomplete", url: "https://supermaven.com/", type: "Official Site" },
+        { label: "Cognition AI (Devin)", url: "https://www.cognition.ai/", type: "Official Site" },
+        { label: "Zed Editor", url: "https://zed.dev/", type: "Official Site" }
+      ]
+    },
+    {
+      term: "Modern Python Backend Stack (FastAPI, Pydantic, SQLAlchemy, Celery)",
+      slug: "modern-python-backend-stack",
+      meaning: "The industry-standard high-performance async Python backend ecosystem for building REST APIs, background task workers, and real-time WebSockets.",
+      purpose: "Build type-safe, auto-documenting, production-grade microservices and backend APIs in Python.",
+      starter: {
+        summary: "FastAPI (async web server), Pydantic (data validation), PostgreSQL + SQLAlchemy (relational database ORM), Redis (caching & rate limiting), Celery (background job queue).",
+        coreConcept: "Async Python web server + Pydantic schema validation + Redis background queue.",
+        quickExample: "FastAPI REST API -> Pydantic Model -> SQLAlchemy Async DB -> Redis Rate Limiter -> Celery Worker"
+      },
+      deeper: {
+        tradeoffs: "FastAPI + Pydantic provides auto-generated OpenAPI (Swagger) interactive docs and sub-millisecond async performance; however, developers must manage async DB connection pools properly.",
+        edgeCases: "Mixing blocking synchronous calls (e.g. `requests.get()`) inside async FastAPI endpoint handlers freezing the main Event Loop."
+      },
+      functions: [
+        "🚦 Decision Matrix: Use FastAPI for high-performance Python microservices, ML model inference APIs, and async WebSockets; use Django when built-in admin panel and batteries-included auth are required.",
+        "💣 Production Gotcha: Invoking blocking sync libraries inside `async def` endpoints will block all concurrent HTTP requests across your single worker process.",
+        "FastAPI — High-performance Python 3.8+ framework built on Starlette and Pydantic with automatic interactive Swagger docs",
+        "Pydantic v2 — Rust-accelerated runtime type validation enforcing strict data schemas and settings management",
+        "PostgreSQL & SQLAlchemy 2.0 — Relational database ORM supporting async connection pools and Alembic schema migrations",
+        "Redis Caching & Rate Limiting — In-memory data store for sliding-window rate limiters, session storage, and cache-aside patterns",
+        "Celery Distributed Worker — Asynchronous task queue offloading long processing jobs (PDF generation, emails) to Redis/RabbitMQ brokers",
+        "WebSockets — Full-duplex bidirectional TCP connections for real-time live streaming"
+      ],
+      objectives: [
+        "Build an async FastAPI POST endpoint with Pydantic request body validation",
+        "Configure Celery background workers with Redis broker for asynchronous PDF generation"
+      ],
+      keyPoints: [
+        "FastAPI automatically generates interactive Swagger UI at `/docs` from Pydantic type annotations",
+        "Pydantic v2 is rewritten in Rust, achieving 5x–20x faster data validation speeds"
+      ],
+      examples: [
+        { isCode: true, language: "python", text: "# FastAPI + Pydantic Async Endpoint Example\nfrom fastapi import FastAPI\nfrom pydantic import BaseModel, EmailStr\n\napp = FastAPI(title='HireReady API')\n\nclass UserSignup(BaseModel):\n    email: EmailStr\n    username: str\n\n@app.post('/api/users')\nasync def create_user(user: UserSignup):\n    # Pydantic validates request JSON automatically!\n    return {'status': 'success', 'user': user.username}" }
+      ],
+      sources: [
+        { label: "FastAPI Documentation", url: "https://fastapi.tiangolo.com/", type: "Official Docs" },
+        { label: "Pydantic Documentation", url: "https://docs.pydantic.dev/", type: "Official Docs" },
+        { label: "SQLAlchemy 2.0 Docs", url: "https://docs.sqlalchemy.org/", type: "Official Docs" },
+        { label: "Redis Official Site & Commands", url: "https://redis.io/", type: "Official Site" },
+        { label: "Celery Task Queue Docs", url: "https://docs.celeryq.dev/", type: "Official Docs" },
+        { label: "FastAPI WebSockets Guide", url: "https://fastapi.tiangolo.com/advanced/websockets/", type: "Guide" }
+      ]
+    },
+    {
       term: "Editors & IDE Recommendations",
       slug: "editors-ides-reference",
       meaning: "The software workbench where code is written, debugged, and refactored.",
