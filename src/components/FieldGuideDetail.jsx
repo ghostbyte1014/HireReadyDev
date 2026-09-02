@@ -266,18 +266,22 @@ export function FieldGuideDetail({
         </div>
       </div>
 
-      {/* DYNAMIC STARTER VIEW CONTENT */}
-      {depthLevel === 'starter' && selectedGuideEntry.starter && (
+      {/* DYNAMIC OVERVIEW / STARTER VIEW CONTENT */}
+      {depthLevel === 'starter' && (
         <div style={{ marginBottom: 24 }}>
-          <div className="fg-sans" style={{ fontSize: 12, color: isDark ? '#9CA3AF' : '#8A8474', textTransform: "uppercase", fontWeight: 700, marginBottom: 8 }}>
-            Executive Summary
-          </div>
-          <p className="fg-sans" style={{ fontSize: 14, lineHeight: 1.6, color: isDark ? '#D1D5DB' : '#3A3D34', marginBottom: 16 }}>
-            {selectedGuideEntry.starter.summary}
-          </p>
+          {selectedGuideEntry.starter?.summary && (
+            <>
+              <div className="fg-sans" style={{ fontSize: 12, color: isDark ? '#9CA3AF' : '#8A8474', textTransform: "uppercase", fontWeight: 700, marginBottom: 8 }}>
+                Executive Summary
+              </div>
+              <p className="fg-sans" style={{ fontSize: 14, lineHeight: 1.6, color: isDark ? '#D1D5DB' : '#3A3D34', marginBottom: 16 }}>
+                {selectedGuideEntry.starter.summary}
+              </p>
+            </>
+          )}
 
           {/* Quick Syntax */}
-          {selectedGuideEntry.starter.quickSyntax && (
+          {selectedGuideEntry.starter?.quickSyntax && (
             <div style={{ marginBottom: 18 }}>
               <div className="fg-sans" style={{ fontSize: 11.5, color: isDark ? '#9CA3AF' : '#8A8474', fontWeight: 700, marginBottom: 6 }}>
                 Quick Syntax / Command Pattern:
@@ -330,57 +334,127 @@ export function FieldGuideDetail({
         </div>
       )}
 
-      {/* DYNAMIC DEEPER VIEW CONTENT */}
+      {/* DYNAMIC SPECIFICATIONS / DEEPER VIEW CONTENT */}
       {depthLevel === 'deeper' && (
-        selectedGuideEntry.deeper ? (
-          <div style={{ marginBottom: 24 }}>
-            <div className="fg-sans" style={{ fontSize: 12, color: isDark ? '#9CA3AF' : '#8A8474', textTransform: "uppercase", fontWeight: 700, marginBottom: 8 }}>
-              Architectural Deep Dive & Trade-offs
-            </div>
-            {selectedGuideEntry.deeper.architecture && (
-              <p className="fg-sans" style={{ fontSize: 14, lineHeight: 1.6, color: isDark ? '#D1D5DB' : '#3A3D34', marginBottom: 16 }}>
-                {selectedGuideEntry.deeper.architecture}
+        <div style={{ marginBottom: 24 }}>
+          {selectedGuideEntry.deeper ? (
+            <>
+              <div className="fg-sans" style={{ fontSize: 12, color: isDark ? '#60A5FA' : '#33417A', textTransform: "uppercase", fontWeight: 700, marginBottom: 8 }}>
+                Architectural Deep Dive & Trade-offs
+              </div>
+              {selectedGuideEntry.deeper.architecture && (
+                <p className="fg-sans" style={{ fontSize: 14, lineHeight: 1.6, color: isDark ? '#D1D5DB' : '#3A3D34', marginBottom: 16 }}>
+                  {selectedGuideEntry.deeper.architecture}
+                </p>
+              )}
+
+              {/* Gotchas & Edge Cases */}
+              {(() => {
+                const gotchasList = Array.isArray(selectedGuideEntry.deeper.gotchas)
+                  ? selectedGuideEntry.deeper.gotchas
+                  : typeof selectedGuideEntry.deeper.gotchas === 'string'
+                  ? [selectedGuideEntry.deeper.gotchas]
+                  : [];
+                if (gotchasList.length === 0) return null;
+                return (
+                  <div style={{ background: isDark ? '#1F2937' : '#FEF2F2', borderLeft: "4px solid #EF4444", padding: 14, borderRadius: "0 4px 4px 0", marginBottom: 18 }}>
+                    <div className="fg-sans" style={{ fontSize: 11, fontWeight: 700, color: "#EF4444", textTransform: "uppercase", marginBottom: 6 }}>
+                      Production Gotchas & Failure Modes:
+                    </div>
+                    <ul style={{ paddingLeft: 16, margin: 0, fontSize: 13, lineHeight: 1.5, color: isDark ? '#FCA5A5' : '#991B1B' }}>
+                      {gotchasList.map((g, idx) => (
+                        <li key={idx} style={{ marginBottom: 4 }}>{g}</li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })()}
+
+              {/* Trade-offs & Comparisons */}
+              {(() => {
+                const tradeoffsList = Array.isArray(selectedGuideEntry.deeper.tradeoffs)
+                  ? selectedGuideEntry.deeper.tradeoffs
+                  : typeof selectedGuideEntry.deeper.tradeoffs === 'string'
+                  ? [selectedGuideEntry.deeper.tradeoffs]
+                  : [];
+                if (tradeoffsList.length === 0) return null;
+                return (
+                  <div style={{ background: isDark ? '#111827' : '#EFF6FF', borderLeft: "4px solid #3B82F6", padding: 14, borderRadius: "0 4px 4px 0", marginBottom: 18 }}>
+                    <div className="fg-sans" style={{ fontSize: 11, fontWeight: 700, color: "#3B82F6", textTransform: "uppercase", marginBottom: 6 }}>
+                      Technical Trade-offs:
+                    </div>
+                    <ul style={{ paddingLeft: 16, margin: 0, fontSize: 13, lineHeight: 1.5, color: isDark ? '#93C5FD' : '#1E40AF' }}>
+                      {tradeoffsList.map((t, idx) => (
+                        <li key={idx} style={{ marginBottom: 4 }}>{t}</li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })()}
+            </>
+          ) : (
+            <div style={{ marginBottom: 18, background: isDark ? '#1F2937' : '#F8F5EE', padding: 14, borderRadius: 6, border: `1px solid ${isDark ? '#374151' : '#E3DECD'}` }}>
+              <div className="fg-sans" style={{ fontSize: 12, color: isDark ? '#60A5FA' : '#33417A', textTransform: "uppercase", fontWeight: 700, marginBottom: 6 }}>
+                Technical Overview & Specifications
+              </div>
+              <p className="fg-sans" style={{ fontSize: 13.5, lineHeight: 1.6, color: isDark ? '#D1D5DB' : '#3A3D34', margin: 0 }}>
+                {selectedGuideEntry.starter?.summary || selectedGuideEntry.purpose}
               </p>
-            )}
-
-            {/* Gotchas & Edge Cases */}
-            {selectedGuideEntry.deeper.gotchas && selectedGuideEntry.deeper.gotchas.length > 0 && (
-              <div style={{ background: isDark ? '#1F2937' : '#FEF2F2', borderLeft: "4px solid #EF4444", padding: 14, borderRadius: "0 4px 4px 0", marginBottom: 18 }}>
-                <div className="fg-sans" style={{ fontSize: 11, fontWeight: 700, color: "#EF4444", textTransform: "uppercase", marginBottom: 6 }}>
-                  Production Gotchas & Failure Modes:
-                </div>
-                <ul style={{ paddingLeft: 16, margin: 0, fontSize: 13, lineHeight: 1.5, color: isDark ? '#FCA5A5' : '#991B1B' }}>
-                  {selectedGuideEntry.deeper.gotchas.map((g, idx) => (
-                    <li key={idx} style={{ marginBottom: 4 }}>{g}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {/* Trade-offs & Comparisons */}
-            {selectedGuideEntry.deeper.tradeoffs && selectedGuideEntry.deeper.tradeoffs.length > 0 && (
-              <div style={{ background: isDark ? '#111827' : '#EFF6FF', borderLeft: "4px solid #3B82F6", padding: 14, borderRadius: "0 4px 4px 0", marginBottom: 18 }}>
-                <div className="fg-sans" style={{ fontSize: 11, fontWeight: 700, color: "#3B82F6", textTransform: "uppercase", marginBottom: 6 }}>
-                  Technical Trade-offs:
-                </div>
-                <ul style={{ paddingLeft: 16, margin: 0, fontSize: 13, lineHeight: 1.5, color: isDark ? '#93C5FD' : '#1E40AF' }}>
-                  {selectedGuideEntry.deeper.tradeoffs.map((t, idx) => (
-                    <li key={idx} style={{ marginBottom: 4 }}>{t}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-        ) : (
-          <div style={{ marginBottom: 24, background: isDark ? '#1F2937' : '#F8F5EE', padding: 16, borderRadius: 6, border: `1px solid ${isDark ? '#374151' : '#E3DECD'}` }}>
-            <div className="fg-sans" style={{ fontSize: 12, color: isDark ? '#60A5FA' : '#33417A', textTransform: "uppercase", fontWeight: 700, marginBottom: 6 }}>
-              Technical Specifications
             </div>
-            <p className="fg-sans" style={{ fontSize: 13.5, lineHeight: 1.6, color: isDark ? '#D1D5DB' : '#3A3D34', margin: 0 }}>
-              {selectedGuideEntry.starter?.summary || selectedGuideEntry.purpose}
-            </p>
-          </div>
-        )
+          )}
+
+          {/* Quick Syntax in Specifications */}
+          {selectedGuideEntry.starter?.quickSyntax && (
+            <div style={{ marginBottom: 18 }}>
+              <div className="fg-sans" style={{ fontSize: 11.5, color: isDark ? '#9CA3AF' : '#8A8474', fontWeight: 700, marginBottom: 6 }}>
+                Quick Syntax / Command Pattern:
+              </div>
+              <pre
+                className="fg-mono"
+                style={{
+                  background: "#22262B",
+                  color: "#A7F3D0",
+                  padding: "10px 14px",
+                  borderRadius: 4,
+                  fontSize: 12.5,
+                  overflowX: "auto",
+                  margin: 0,
+                  border: "1px solid #334155"
+                }}
+              >
+                {selectedGuideEntry.starter.quickSyntax}
+              </pre>
+            </div>
+          )}
+
+          {/* Functions List in Specifications */}
+          {selectedGuideEntry.functions && selectedGuideEntry.functions.length > 0 && (
+            <div style={{ marginBottom: 18 }}>
+              <div className="fg-sans" style={{ fontSize: 11.5, color: isDark ? '#9CA3AF' : '#8A8474', fontWeight: 700, marginBottom: 6 }}>
+                Primary Functions:
+              </div>
+              <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13.5, lineHeight: 1.55, color: isDark ? '#D1D5DB' : '#3A3D34' }}>
+                {selectedGuideEntry.functions.map((fn, idx) => (
+                  <li key={idx} style={{ marginBottom: 4 }}>{fn}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Objectives List in Specifications */}
+          {selectedGuideEntry.objectives && selectedGuideEntry.objectives.length > 0 && (
+            <div>
+              <div className="fg-sans" style={{ fontSize: 11.5, color: isDark ? '#9CA3AF' : '#8A8474', fontWeight: 700, marginBottom: 6 }}>
+                Engineering Objectives:
+              </div>
+              <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13.5, lineHeight: 1.55, color: isDark ? '#D1D5DB' : '#3A3D34' }}>
+                {selectedGuideEntry.objectives.map((obj, idx) => (
+                  <li key={idx} style={{ marginBottom: 4 }}>{obj}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
       )}
 
       {/* Key Takeaways */}
