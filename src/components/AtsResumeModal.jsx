@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, Download, X, CheckCircle2, AlertCircle, Info, Sparkles, Copy, Printer, UserCheck, Layout, Palette, AlignLeft, AlignCenter, Plus, Trash2, Eye, Edit3 } from 'lucide-react';
+import { FileText, Download, X, CheckCircle2, AlertCircle, Info, Sparkles, Copy, Printer, UserCheck, Layout, Palette, AlignLeft, AlignCenter, Plus, Trash2, Eye, Edit3, BookOpen } from 'lucide-react';
 
 export function AtsResumeModal({ onClose, theme }) {
   const isDark = theme === 'dark';
