@@ -824,11 +824,11 @@ export function AtsResumeModal({ onClose, theme }) {
                     </div>
 
                     {education.map((ed) => (
-                      <div key={ed.id} style={{ display: "grid", gridTemplateColumns: "1fr 1fr 60px 24px", gap: 6, alignItems: "center", marginBottom: 6 }}>
+                      <div key={ed.id} style={{ display: "grid", gridTemplateColumns: isMobileScreen ? "1fr 1fr" : "1fr 1fr 60px 24px", gap: 6, alignItems: "center", marginBottom: 8 }}>
                         <input type="text" value={ed.degree} onChange={e => updateEducation(ed.id, 'degree', e.target.value)} placeholder="Degree" style={formInputStyle} />
                         <input type="text" value={ed.school} onChange={e => updateEducation(ed.id, 'school', e.target.value)} placeholder="University / School" style={formInputStyle} />
                         <input type="text" value={ed.year} onChange={e => updateEducation(ed.id, 'year', e.target.value)} placeholder="Year" style={formInputStyle} />
-                        <button onClick={() => removeEducation(ed.id)} style={{ background: "transparent", border: "none", color: "#DC2626", cursor: "pointer" }}><Trash2 size={13} /></button>
+                        <button onClick={() => removeEducation(ed.id)} style={{ background: "transparent", border: "none", color: "#DC2626", cursor: "pointer", display: "flex", justifyContent: "center" }}><Trash2 size={13} /></button>
                       </div>
                     ))}
 

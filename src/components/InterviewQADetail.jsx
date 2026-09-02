@@ -152,7 +152,7 @@ export function InterviewQADetail({
 
       {/* TIMER & PRACTICE TOOLS */}
       {practiceMode && (
-        <div style={{ background: isDark ? "#1F2937" : "#F8F5EE", border: `1px solid ${isDark ? "#374151" : "#CFC7B0"}`, borderRadius: 6, padding: 12, marginBottom: 20, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div style={{ background: isDark ? "#1F2937" : "#F8F5EE", border: `1px solid ${isDark ? "#374151" : "#CFC7B0"}`, borderRadius: 6, padding: 12, marginBottom: 20, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <Clock size={16} color={timerSeconds < 10 ? "#DC2626" : (isDark ? "#60A5FA" : "#33417A")} />
             <span style={{ fontSize: 14, fontWeight: 800, fontFamily: "monospace", color: timerSeconds < 10 ? "#DC2626" : (isDark ? "#FFF" : "#22262B") }}>
