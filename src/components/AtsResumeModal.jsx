@@ -22,6 +22,29 @@ export function AtsResumeModal({ onClose, theme }) {
   const [accentColor, setAccentColor] = useState('#000000'); // '#000000' | '#1E3A8A' | '#334155' | '#065F46' | '#7C2D12'
   const [fontFamily, setFontFamily] = useState('Arial, Helvetica, sans-serif'); // Arial | Georgia | Calibri | Times
 
+  // Unified Form Controls Style Object
+  const formInputStyle = {
+    width: "100%",
+    padding: "6px 9px",
+    borderRadius: 5,
+    border: `1px solid ${isDark ? '#4B5563' : '#CFC7B0'}`,
+    background: isDark ? '#111827' : '#FFFFFF',
+    color: isDark ? '#EDE9DE' : '#22262B',
+    fontSize: "11.5px",
+    fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    outline: "none",
+    boxSizing: "border-box"
+  };
+
+  const cardContainerStyle = {
+    background: isDark ? '#111827' : '#FFFFFF',
+    padding: 14,
+    borderRadius: 8,
+    border: `1px solid ${isDark ? '#374151' : '#CFC7B0'}`,
+    marginBottom: 14,
+    boxShadow: "0 1px 3px rgba(0,0,0,0.04)"
+  };
+
   // Dynamic Personal Header State
   const [personalInfo, setPersonalInfo] = useState({
     fullName: "Alex Rivera",
@@ -271,11 +294,11 @@ export function AtsResumeModal({ onClose, theme }) {
     >
       <div
         style={{
-          background: isDark ? '#1F2937' : '#F8F5EE',
+          background: isDark ? '#1F2937' : '#EDE9DE',
           border: `1px solid ${isDark ? '#374151' : '#CFC7B0'}`,
           color: isDark ? '#EDE9DE' : '#22262B',
           borderRadius: 10,
-          maxWidth: 1120,
+          maxWidth: 1160,
           width: "100%",
           maxHeight: "94vh",
           display: "flex",
@@ -304,7 +327,7 @@ export function AtsResumeModal({ onClose, theme }) {
                 Single-Column ATS Resume Builder & Masterclass
               </div>
               <div style={{ fontSize: 11, color: "#9CA3AF" }}>
-                HireReady Dev &bull; Optimized for Workday, Greenhouse, Lever, & Taleo Scanners
+                HireReady Dev &bull; Optimized for Workday, Greenhouse, Lever, & Taleo ATS Scanners
               </div>
             </div>
           </div>
@@ -514,35 +537,35 @@ export function AtsResumeModal({ onClose, theme }) {
             {/* MODAL BODY CONTENT */}
             <div style={{ flex: 1, overflowY: "auto", padding: 20 }}>
               {activeTab === 'template' && (
-                <div style={{ display: "grid", gridTemplateColumns: "450px 1fr", gap: 20 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "470px 1fr", gap: 20 }}>
                   {/* LEFT COLUMN: EDITABLE DYNAMIC CONTROLS & FORM */}
                   <div className="fg-scroll" style={{ maxHeight: "74vh", overflowY: "auto", paddingRight: 8 }}>
                     {/* HEADER CUSTOMIZATION TOOLBAR */}
-                    <div style={{ background: isDark ? '#111827' : '#FFF', padding: 12, borderRadius: 6, border: `1px solid ${isDark ? '#374151' : '#CFC7B0'}`, marginBottom: 14 }}>
-                      <div style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", color: isDark ? '#60A5FA' : '#33417A', marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
+                    <div style={cardContainerStyle}>
+                      <div style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", color: isDark ? '#60A5FA' : '#33417A', marginBottom: 10, display: "flex", alignItems: "center", gap: 6 }}>
                         <Palette size={14} /> Customize Resume Header & Styling
                       </div>
 
-                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 8 }}>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
                         <div>
-                          <label style={{ fontSize: 10.5, fontWeight: 700, display: "block", marginBottom: 3, color: isDark ? '#9CA3AF' : '#5B5A52' }}>Header Alignment</label>
+                          <label style={{ fontSize: 11, fontWeight: 700, display: "block", marginBottom: 4, color: isDark ? '#9CA3AF' : '#5B5A52' }}>Header Alignment</label>
                           <div style={{ display: "flex", gap: 4 }}>
                             <button
                               onClick={() => setHeaderAlign('center')}
                               style={{
                                 flex: 1,
-                                padding: 4,
+                                padding: "6px 4px",
                                 borderRadius: 4,
-                                border: "1px solid #D1D5DB",
-                                fontSize: 10.5,
+                                border: `1px solid ${isDark ? '#4B5563' : '#CFC7B0'}`,
+                                fontSize: 11,
                                 fontWeight: 700,
-                                background: headerAlign === 'center' ? (isDark ? '#374151' : '#22262B') : 'transparent',
-                                color: headerAlign === 'center' ? '#FFF' : 'inherit',
+                                background: headerAlign === 'center' ? (isDark ? '#3B82F6' : '#22262B') : (isDark ? '#1F2937' : '#F8F5EE'),
+                                color: headerAlign === 'center' ? '#FFF' : (isDark ? '#EDE9DE' : '#22262B'),
                                 cursor: "pointer",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
-                                gap: 3
+                                gap: 4
                               }}
                             >
                               <AlignCenter size={12} /> Center
@@ -551,18 +574,18 @@ export function AtsResumeModal({ onClose, theme }) {
                               onClick={() => setHeaderAlign('left')}
                               style={{
                                 flex: 1,
-                                padding: 4,
+                                padding: "6px 4px",
                                 borderRadius: 4,
-                                border: "1px solid #D1D5DB",
-                                fontSize: 10.5,
+                                border: `1px solid ${isDark ? '#4B5563' : '#CFC7B0'}`,
+                                fontSize: 11,
                                 fontWeight: 700,
-                                background: headerAlign === 'left' ? (isDark ? '#374151' : '#22262B') : 'transparent',
-                                color: headerAlign === 'left' ? '#FFF' : 'inherit',
+                                background: headerAlign === 'left' ? (isDark ? '#3B82F6' : '#22262B') : (isDark ? '#1F2937' : '#F8F5EE'),
+                                color: headerAlign === 'left' ? '#FFF' : (isDark ? '#EDE9DE' : '#22262B'),
                                 cursor: "pointer",
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
-                                gap: 3
+                                gap: 4
                               }}
                             >
                               <AlignLeft size={12} /> Left
@@ -571,11 +594,11 @@ export function AtsResumeModal({ onClose, theme }) {
                         </div>
 
                         <div>
-                          <label style={{ fontSize: 10.5, fontWeight: 700, display: "block", marginBottom: 3, color: isDark ? '#9CA3AF' : '#5B5A52' }}>Accent Divider Color</label>
+                          <label style={{ fontSize: 11, fontWeight: 700, display: "block", marginBottom: 4, color: isDark ? '#9CA3AF' : '#5B5A52' }}>Accent Divider Color</label>
                           <select
                             value={accentColor}
                             onChange={e => setAccentColor(e.target.value)}
-                            style={{ width: "100%", padding: 5, borderRadius: 4, border: "1px solid #D1D5DB", fontSize: 11, background: isDark ? '#1F2937' : '#FFF', color: isDark ? '#FFF' : '#000' }}
+                            style={formInputStyle}
                           >
                             <option value="#000000">Classic Black (#000000)</option>
                             <option value="#1E3A8A">Navy Blue (#1E3A8A)</option>
@@ -587,11 +610,11 @@ export function AtsResumeModal({ onClose, theme }) {
                       </div>
 
                       <div>
-                        <label style={{ fontSize: 10.5, fontWeight: 700, display: "block", marginBottom: 3, color: isDark ? '#9CA3AF' : '#5B5A52' }}>Typography Family</label>
+                        <label style={{ fontSize: 11, fontWeight: 700, display: "block", marginBottom: 4, color: isDark ? '#9CA3AF' : '#5B5A52' }}>Typography Family</label>
                         <select
                           value={fontFamily}
                           onChange={e => setFontFamily(e.target.value)}
-                          style={{ width: "100%", padding: 5, borderRadius: 4, border: "1px solid #D1D5DB", fontSize: 11, background: isDark ? '#1F2937' : '#FFF', color: isDark ? '#FFF' : '#000' }}
+                          style={formInputStyle}
                         >
                           <option value="Arial, Helvetica, sans-serif">Arial / Helvetica (Standard Tech)</option>
                           <option value="system-ui, -apple-system, sans-serif">System Sans-Serif (Modern Clean)</option>
@@ -602,52 +625,60 @@ export function AtsResumeModal({ onClose, theme }) {
                     </div>
 
                     {/* PERSONAL HEADER INFO */}
-                    <div style={{ background: isDark ? '#111827' : '#FFF', padding: 12, borderRadius: 6, border: `1px solid ${isDark ? '#374151' : '#CFC7B0'}`, marginBottom: 14 }}>
-                      <div style={{ fontSize: 11, fontWeight: 700, marginBottom: 8, color: isDark ? '#9CA3AF' : '#5B5A52' }}>Header & Contact Info</div>
-                      <input type="text" value={personalInfo.fullName} onChange={e => handlePersonalChange('fullName', e.target.value)} placeholder="Full Name" style={{ width: "100%", padding: 6, marginBottom: 6, borderRadius: 4, border: "1px solid #D1D5DB", fontSize: 12 }} />
-                      <input type="text" value={personalInfo.targetTitle} onChange={e => handlePersonalChange('targetTitle', e.target.value)} placeholder="Target Role Title" style={{ width: "100%", padding: 6, marginBottom: 6, borderRadius: 4, border: "1px solid #D1D5DB", fontSize: 12 }} />
-                      <textarea value={personalInfo.summary} onChange={e => handlePersonalChange('summary', e.target.value)} placeholder="Professional Summary (Optional 2-sentence summary)" rows={2} style={{ width: "100%", padding: 6, marginBottom: 6, borderRadius: 4, border: "1px solid #D1D5DB", fontSize: 11 }} />
-                      
-                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6, marginBottom: 6 }}>
-                        <input type="text" value={personalInfo.email} onChange={e => handlePersonalChange('email', e.target.value)} placeholder="Email" style={{ padding: 6, borderRadius: 4, border: "1px solid #D1D5DB", fontSize: 12 }} />
-                        <input type="text" value={personalInfo.phone} onChange={e => handlePersonalChange('phone', e.target.value)} placeholder="Phone" style={{ padding: 6, borderRadius: 4, border: "1px solid #D1D5DB", fontSize: 12 }} />
+                    <div style={cardContainerStyle}>
+                      <div style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", color: isDark ? '#60A5FA' : '#33417A', marginBottom: 10 }}>Header & Contact Info</div>
+                      <div style={{ marginBottom: 8 }}>
+                        <input type="text" value={personalInfo.fullName} onChange={e => handlePersonalChange('fullName', e.target.value)} placeholder="Full Name" style={formInputStyle} />
                       </div>
-                      <input type="text" value={personalInfo.location} onChange={e => handlePersonalChange('location', e.target.value)} placeholder="City, State / Country" style={{ width: "100%", padding: 6, marginBottom: 6, borderRadius: 4, border: "1px solid #D1D5DB", fontSize: 12 }} />
+                      <div style={{ marginBottom: 8 }}>
+                        <input type="text" value={personalInfo.targetTitle} onChange={e => handlePersonalChange('targetTitle', e.target.value)} placeholder="Target Role Title" style={formInputStyle} />
+                      </div>
+                      <div style={{ marginBottom: 8 }}>
+                        <textarea value={personalInfo.summary} onChange={e => handlePersonalChange('summary', e.target.value)} placeholder="Professional Summary (Optional 2-sentence summary)" rows={2} style={formInputStyle} />
+                      </div>
                       
-                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
-                        <input type="text" value={personalInfo.github} onChange={e => handlePersonalChange('github', e.target.value)} placeholder="GitHub URL" style={{ padding: 6, borderRadius: 4, border: "1px solid #D1D5DB", fontSize: 12 }} />
-                        <input type="text" value={personalInfo.linkedin} onChange={e => handlePersonalChange('linkedin', e.target.value)} placeholder="LinkedIn URL" style={{ padding: 6, borderRadius: 4, border: "1px solid #D1D5DB", fontSize: 12 }} />
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 8 }}>
+                        <input type="text" value={personalInfo.email} onChange={e => handlePersonalChange('email', e.target.value)} placeholder="Email" style={formInputStyle} />
+                        <input type="text" value={personalInfo.phone} onChange={e => handlePersonalChange('phone', e.target.value)} placeholder="Phone" style={formInputStyle} />
+                      </div>
+                      <div style={{ marginBottom: 8 }}>
+                        <input type="text" value={personalInfo.location} onChange={e => handlePersonalChange('location', e.target.value)} placeholder="City, State / Country" style={formInputStyle} />
+                      </div>
+                      
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                        <input type="text" value={personalInfo.github} onChange={e => handlePersonalChange('github', e.target.value)} placeholder="GitHub URL" style={formInputStyle} />
+                        <input type="text" value={personalInfo.linkedin} onChange={e => handlePersonalChange('linkedin', e.target.value)} placeholder="LinkedIn URL" style={formInputStyle} />
                       </div>
                     </div>
 
                     {/* DYNAMIC SKILLS MATRIX SECTION */}
-                    <div style={{ background: isDark ? '#111827' : '#FFF', padding: 12, borderRadius: 6, border: `1px solid ${isDark ? '#374151' : '#CFC7B0'}`, marginBottom: 14 }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-                        <div style={{ fontSize: 11, fontWeight: 700, color: isDark ? '#9CA3AF' : '#5B5A52' }}>Technical Skills Keyword Matrix</div>
+                    <div style={cardContainerStyle}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                        <div style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", color: isDark ? '#60A5FA' : '#33417A' }}>Technical Skills Keywords</div>
                         <button
                           onClick={addSkillCategory}
-                          style={{ padding: "3px 8px", background: "#059669", color: "#FFF", border: "none", borderRadius: 4, fontSize: 10.5, fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: 3 }}
+                          style={{ padding: "4px 10px", background: "#059669", color: "#FFF", border: "none", borderRadius: 4, fontSize: 10.5, fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: 4 }}
                         >
                           <Plus size={12} /> Add Category
                         </button>
                       </div>
 
                       {skills.map((s) => (
-                        <div key={s.id} style={{ borderBottom: `1px solid ${isDark ? '#374151' : '#E5E7EB'}`, paddingBottom: 8, marginBottom: 8 }}>
+                        <div key={s.id} style={{ borderBottom: `1px solid ${isDark ? '#374151' : '#E5E7EB'}`, paddingBottom: 10, marginBottom: 10 }}>
                           <div style={{ display: "flex", gap: 6, alignItems: "center", marginBottom: 4 }}>
                             <input
                               type="text"
                               value={s.category}
                               onChange={e => updateSkillCategory(s.id, 'category', e.target.value)}
                               placeholder="Category Title (e.g. Languages)"
-                              style={{ flex: 1, padding: 4, borderRadius: 4, border: "1px solid #D1D5DB", fontSize: 11, fontWeight: "bold" }}
+                              style={{ ...formInputStyle, fontWeight: "bold" }}
                             />
                             <button
                               onClick={() => removeSkillCategory(s.id)}
                               title="Remove Skill Category"
-                              style={{ background: "transparent", border: "none", color: "#DC2626", cursor: "pointer", padding: 2 }}
+                              style={{ background: "transparent", border: "none", color: "#DC2626", cursor: "pointer", padding: 4 }}
                             >
-                              <Trash2 size={13} />
+                              <Trash2 size={14} />
                             </button>
                           </div>
                           <input
@@ -655,69 +686,69 @@ export function AtsResumeModal({ onClose, theme }) {
                             value={s.items}
                             onChange={e => updateSkillCategory(s.id, 'items', e.target.value)}
                             placeholder="Comma-separated skills (e.g. React, Next.js, FastAPI)"
-                            style={{ width: "100%", padding: 5, borderRadius: 4, border: "1px solid #D1D5DB", fontSize: 11 }}
+                            style={formInputStyle}
                           />
                         </div>
                       ))}
                     </div>
 
                     {/* DYNAMIC WORK EXPERIENCE SECTION */}
-                    <div style={{ background: isDark ? '#111827' : '#FFF', padding: 12, borderRadius: 6, border: `1px solid ${isDark ? '#374151' : '#CFC7B0'}`, marginBottom: 14 }}>
+                    <div style={cardContainerStyle}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-                        <div style={{ fontSize: 11, fontWeight: 700, color: isDark ? '#9CA3AF' : '#5B5A52' }}>Work Experience Entries</div>
+                        <div style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", color: isDark ? '#60A5FA' : '#33417A' }}>Work Experience</div>
                         <button
                           onClick={addExperience}
-                          style={{ padding: "3px 8px", background: "#059669", color: "#FFF", border: "none", borderRadius: 4, fontSize: 10.5, fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: 3 }}
+                          style={{ padding: "4px 10px", background: "#059669", color: "#FFF", border: "none", borderRadius: 4, fontSize: 10.5, fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: 4 }}
                         >
                           <Plus size={12} /> Add Experience
                         </button>
                       </div>
 
                       {experiences.map((exp, expIdx) => (
-                        <div key={exp.id} style={{ background: isDark ? '#1F2937' : '#F8F5EE', padding: 10, borderRadius: 6, border: `1px solid ${isDark ? '#374151' : '#CFC7B0'}`, marginBottom: 12 }}>
-                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
-                            <span style={{ fontSize: 11, fontWeight: 800, color: isDark ? '#60A5FA' : '#33417A' }}>Job #{expIdx + 1}</span>
+                        <div key={exp.id} style={{ background: isDark ? '#1F2937' : '#F8F5EE', padding: 12, borderRadius: 6, border: `1px solid ${isDark ? '#374151' : '#CFC7B0'}`, marginBottom: 12 }}>
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                            <span style={{ fontSize: 11.5, fontWeight: 800, color: isDark ? '#60A5FA' : '#33417A' }}>Job #{expIdx + 1}</span>
                             <button
                               onClick={() => removeExperience(exp.id)}
-                              style={{ background: "transparent", border: "none", color: "#DC2626", cursor: "pointer", padding: 2, fontSize: 10.5, fontWeight: 700, display: "flex", alignItems: "center", gap: 2 }}
+                              style={{ background: "transparent", border: "none", color: "#DC2626", cursor: "pointer", padding: 2, fontSize: 11, fontWeight: 700, display: "flex", alignItems: "center", gap: 3 }}
                             >
-                              <Trash2 size={12} /> Remove Job
+                              <Trash2 size={13} /> Remove Job
                             </button>
                           </div>
 
                           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6, marginBottom: 6 }}>
-                            <input type="text" value={exp.company} onChange={e => updateExperience(exp.id, 'company', e.target.value)} placeholder="Company Name" style={{ padding: 5, borderRadius: 4, border: "1px solid #D1D5DB", fontSize: 11 }} />
-                            <input type="text" value={exp.role} onChange={e => updateExperience(exp.id, 'role', e.target.value)} placeholder="Role Title" style={{ padding: 5, borderRadius: 4, border: "1px solid #D1D5DB", fontSize: 11 }} />
+                            <input type="text" value={exp.company} onChange={e => updateExperience(exp.id, 'company', e.target.value)} placeholder="Company Name" style={formInputStyle} />
+                            <input type="text" value={exp.role} onChange={e => updateExperience(exp.id, 'role', e.target.value)} placeholder="Role Title" style={formInputStyle} />
                           </div>
 
                           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6, marginBottom: 8 }}>
-                            <input type="text" value={exp.dates} onChange={e => updateExperience(exp.id, 'dates', e.target.value)} placeholder="Dates (e.g. 2023 – Present)" style={{ padding: 5, borderRadius: 4, border: "1px solid #D1D5DB", fontSize: 11 }} />
-                            <input type="text" value={exp.location} onChange={e => updateExperience(exp.id, 'location', e.target.value)} placeholder="Location" style={{ padding: 5, borderRadius: 4, border: "1px solid #D1D5DB", fontSize: 11 }} />
+                            <input type="text" value={exp.dates} onChange={e => updateExperience(exp.id, 'dates', e.target.value)} placeholder="Dates (e.g. 2023 – Present)" style={formInputStyle} />
+                            <input type="text" value={exp.location} onChange={e => updateExperience(exp.id, 'location', e.target.value)} placeholder="Location" style={formInputStyle} />
                           </div>
 
-                          <div style={{ fontSize: 10.5, fontWeight: 700, marginBottom: 4, color: isDark ? '#9CA3AF' : '#5B5A52', display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                          <div style={{ fontSize: 11, fontWeight: 700, marginBottom: 6, color: isDark ? '#9CA3AF' : '#5B5A52', display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                             <span>Bullet Points (Google X-Y-Z Formula):</span>
                             <button
                               onClick={() => addExpBullet(exp.id)}
-                              style={{ background: "transparent", border: "none", color: "#059669", cursor: "pointer", fontSize: 10, fontWeight: 700, display: "flex", alignItems: "center", gap: 2 }}
+                              style={{ background: "transparent", border: "none", color: "#059669", cursor: "pointer", fontSize: 10.5, fontWeight: 700, display: "flex", alignItems: "center", gap: 3 }}
                             >
-                              <Plus size={11} /> Add Bullet
+                              <Plus size={12} /> Add Bullet
                             </button>
                           </div>
 
                           {exp.bullets.map((bText, bIdx) => (
-                            <div key={bIdx} style={{ display: "flex", gap: 4, alignItems: "flex-start", marginBottom: 4 }}>
+                            <div key={bIdx} style={{ display: "flex", gap: 6, alignItems: "flex-start", marginBottom: 6 }}>
                               <textarea
                                 value={bText}
                                 onChange={e => updateExpBullet(exp.id, bIdx, e.target.value)}
                                 rows={2}
-                                style={{ flex: 1, padding: 5, borderRadius: 4, border: "1px solid #D1D5DB", fontSize: 10.5 }}
+                                style={formInputStyle}
                               />
                               <button
                                 onClick={() => removeExpBullet(exp.id, bIdx)}
-                                style={{ background: "transparent", border: "none", color: "#DC2626", cursor: "pointer", padding: 2, marginTop: 4 }}
+                                style={{ background: "transparent", border: "none", color: "#DC2626", cursor: "pointer", padding: 4, marginTop: 2 }}
                               >
-                                <Trash2 size={12} />
+                                <Trash2 size={13} />
                               </button>
                             </div>
                           ))}
@@ -726,42 +757,46 @@ export function AtsResumeModal({ onClose, theme }) {
                     </div>
 
                     {/* DYNAMIC KEY PROJECTS SECTION */}
-                    <div style={{ background: isDark ? '#111827' : '#FFF', padding: 12, borderRadius: 6, border: `1px solid ${isDark ? '#374151' : '#CFC7B0'}`, marginBottom: 14 }}>
+                    <div style={cardContainerStyle}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-                        <div style={{ fontSize: 11, fontWeight: 700, color: isDark ? '#9CA3AF' : '#5B5A52' }}>Technical Projects</div>
+                        <div style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", color: isDark ? '#60A5FA' : '#33417A' }}>Technical Projects</div>
                         <button
                           onClick={addProject}
-                          style={{ padding: "3px 8px", background: "#059669", color: "#FFF", border: "none", borderRadius: 4, fontSize: 10.5, fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: 3 }}
+                          style={{ padding: "4px 10px", background: "#059669", color: "#FFF", border: "none", borderRadius: 4, fontSize: 10.5, fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: 4 }}
                         >
                           <Plus size={12} /> Add Project
                         </button>
                       </div>
 
                       {projects.map((proj, projIdx) => (
-                        <div key={proj.id} style={{ background: isDark ? '#1F2937' : '#F8F5EE', padding: 10, borderRadius: 6, border: `1px solid ${isDark ? '#374151' : '#CFC7B0'}`, marginBottom: 10 }}>
-                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
-                            <span style={{ fontSize: 11, fontWeight: 800, color: isDark ? '#60A5FA' : '#33417A' }}>Project #{projIdx + 1}</span>
+                        <div key={proj.id} style={{ background: isDark ? '#1F2937' : '#F8F5EE', padding: 12, borderRadius: 6, border: `1px solid ${isDark ? '#374151' : '#CFC7B0'}`, marginBottom: 10 }}>
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+                            <span style={{ fontSize: 11.5, fontWeight: 800, color: isDark ? '#60A5FA' : '#33417A' }}>Project #{projIdx + 1}</span>
                             <button
                               onClick={() => removeProject(proj.id)}
                               style={{ background: "transparent", border: "none", color: "#DC2626", cursor: "pointer", padding: 2 }}
                             >
-                              <Trash2 size={12} />
+                              <Trash2 size={13} />
                             </button>
                           </div>
-                          <input type="text" value={proj.name} onChange={e => updateProject(proj.id, 'name', e.target.value)} placeholder="Project Name" style={{ width: "100%", padding: 5, marginBottom: 4, borderRadius: 4, border: "1px solid #D1D5DB", fontSize: 11, fontWeight: "bold" }} />
-                          <input type="text" value={proj.tech} onChange={e => updateProject(proj.id, 'tech', e.target.value)} placeholder="Technologies Used" style={{ width: "100%", padding: 5, marginBottom: 4, borderRadius: 4, border: "1px solid #D1D5DB", fontSize: 11 }} />
-                          <textarea value={proj.bullets[0] || ''} onChange={e => updateProjectBullet(proj.id, e.target.value)} placeholder="Project achievement bullet" rows={2} style={{ width: "100%", padding: 5, borderRadius: 4, border: "1px solid #D1D5DB", fontSize: 10.5 }} />
+                          <div style={{ marginBottom: 6 }}>
+                            <input type="text" value={proj.name} onChange={e => updateProject(proj.id, 'name', e.target.value)} placeholder="Project Name" style={{ ...formInputStyle, fontWeight: "bold" }} />
+                          </div>
+                          <div style={{ marginBottom: 6 }}>
+                            <input type="text" value={proj.tech} onChange={e => updateProject(proj.id, 'tech', e.target.value)} placeholder="Technologies Used" style={formInputStyle} />
+                          </div>
+                          <textarea value={proj.bullets[0] || ''} onChange={e => updateProjectBullet(proj.id, e.target.value)} placeholder="Project achievement bullet" rows={2} style={formInputStyle} />
                         </div>
                       ))}
                     </div>
 
                     {/* DYNAMIC EDUCATION & CERTIFICATIONS */}
-                    <div style={{ background: isDark ? '#111827' : '#FFF', padding: 12, borderRadius: 6, border: `1px solid ${isDark ? '#374151' : '#CFC7B0'}`, marginBottom: 14 }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-                        <div style={{ fontSize: 11, fontWeight: 700, color: isDark ? '#9CA3AF' : '#5B5A52' }}>Education</div>
+                    <div style={cardContainerStyle}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                        <div style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", color: isDark ? '#60A5FA' : '#33417A' }}>Education</div>
                         <button
                           onClick={addEducation}
-                          style={{ padding: "3px 8px", background: "#059669", color: "#FFF", border: "none", borderRadius: 4, fontSize: 10.5, fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: 3 }}
+                          style={{ padding: "4px 10px", background: "#059669", color: "#FFF", border: "none", borderRadius: 4, fontSize: 10.5, fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: 4 }}
                         >
                           <Plus size={12} /> Add Education
                         </button>
@@ -769,16 +804,16 @@ export function AtsResumeModal({ onClose, theme }) {
 
                       {education.map((ed) => (
                         <div key={ed.id} style={{ display: "grid", gridTemplateColumns: "1fr 1fr 60px 24px", gap: 6, alignItems: "center", marginBottom: 6 }}>
-                          <input type="text" value={ed.degree} onChange={e => updateEducation(ed.id, 'degree', e.target.value)} placeholder="Degree" style={{ padding: 4, borderRadius: 4, border: "1px solid #D1D5DB", fontSize: 11 }} />
-                          <input type="text" value={ed.school} onChange={e => updateEducation(ed.id, 'school', e.target.value)} placeholder="University / School" style={{ padding: 4, borderRadius: 4, border: "1px solid #D1D5DB", fontSize: 11 }} />
-                          <input type="text" value={ed.year} onChange={e => updateEducation(ed.id, 'year', e.target.value)} placeholder="Year" style={{ padding: 4, borderRadius: 4, border: "1px solid #D1D5DB", fontSize: 11 }} />
-                          <button onClick={() => removeEducation(ed.id)} style={{ background: "transparent", border: "none", color: "#DC2626", cursor: "pointer" }}><Trash2 size={12} /></button>
+                          <input type="text" value={ed.degree} onChange={e => updateEducation(ed.id, 'degree', e.target.value)} placeholder="Degree" style={formInputStyle} />
+                          <input type="text" value={ed.school} onChange={e => updateEducation(ed.id, 'school', e.target.value)} placeholder="University / School" style={formInputStyle} />
+                          <input type="text" value={ed.year} onChange={e => updateEducation(ed.id, 'year', e.target.value)} placeholder="Year" style={formInputStyle} />
+                          <button onClick={() => removeEducation(ed.id)} style={{ background: "transparent", border: "none", color: "#DC2626", cursor: "pointer" }}><Trash2 size={13} /></button>
                         </div>
                       ))}
 
-                      <div style={{ marginTop: 8 }}>
-                        <label style={{ fontSize: 10.5, fontWeight: 700, display: "block", marginBottom: 2, color: isDark ? '#9CA3AF' : '#5B5A52' }}>Certifications</label>
-                        <input type="text" value={certifications} onChange={e => setCertifications(e.target.value)} placeholder="AWS Certified, CKAD, CISSP..." style={{ width: "100%", padding: 6, borderRadius: 4, border: "1px solid #D1D5DB", fontSize: 11 }} />
+                      <div style={{ marginTop: 10 }}>
+                        <label style={{ fontSize: 11, fontWeight: 700, display: "block", marginBottom: 4, color: isDark ? '#9CA3AF' : '#5B5A52' }}>Certifications</label>
+                        <input type="text" value={certifications} onChange={e => setCertifications(e.target.value)} placeholder="AWS Certified, CKAD, CISSP..." style={formInputStyle} />
                       </div>
                     </div>
                   </div>
