@@ -228,26 +228,26 @@ export function Footer({ theme, handleExportBackup, handleImportBackup, onRestar
               {/* SECTION 1: STUDY MODES GUIDE */}
               <div style={{ marginBottom: 18 }}>
                 <h3 style={{ fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5, fontWeight: 700, color: isDark ? '#60A5FA' : '#33417A', marginBottom: 6 }}>
-                  📖 Study Views & Features
+                  System Features & Operating Modes
                 </h3>
                 <ul style={{ paddingLeft: 18, lineHeight: 1.55, fontSize: 12.5, color: isDark ? '#D1D5DB' : '#3A3D34' }}>
                   <li style={{ marginBottom: 4 }}>
-                    <strong>🌱 Starter View:</strong> High-level definitions, core concepts, and quick syntax.
+                    <strong>Overview Mode:</strong> High-level definitions, core concepts, and syntax reference.
                   </li>
                   <li style={{ marginBottom: 4 }}>
-                    <strong>🔬 Deeper View:</strong> Architectural tradeoffs, gotchas, performance limits, and edge cases.
+                    <strong>Specifications Mode:</strong> Architectural trade-offs, performance constraints, and production edge cases.
                   </li>
                   <li style={{ marginBottom: 4 }}>
-                    <strong>🎯 Practice Mode:</strong> Active recall testing with hidden sample answers, 60s practice timer, and progress tracking.
+                    <strong>Interview Practice Mode:</strong> Active recall testing with hidden sample answers, 60s practice timer, and readiness tracking.
                   </li>
                   <li style={{ marginBottom: 4 }}>
-                    <strong>📝 Personal Notes:</strong> Custom study notebook on every topic & question (auto-saved to device).
+                    <strong>Personal Study Notes:</strong> Private study notebook attached to every topic & question (persisted locally).
                   </li>
                   <li style={{ marginBottom: 4 }}>
-                    <strong>📄 Save PDF:</strong> Click <em>"Save PDF"</em> in the header bar to preview and download any topic or Q&A study sheet as a PDF document complete with author credentials (<strong>ghostbyte</strong>).
+                    <strong>PDF Export:</strong> Click <em>"Save PDF"</em> in the header bar to preview and download any topic or Q&A study sheet as a clean PDF document.
                   </li>
                   <li>
-                    <strong>🌐 External Documentation:</strong> Authoritative links (MDN, W3C, Official Specs) requiring an active Wi-Fi connection.
+                    <strong>External Documentation:</strong> Authoritative reference links (MDN, W3C, Official Specs) requiring an active network connection.
                   </li>
                 </ul>
               </div>
@@ -264,8 +264,8 @@ export function Footer({ theme, handleExportBackup, handleImportBackup, onRestar
 
               {/* SECTION 3: TRADEMARK DISCLAIMER */}
               <div style={{ marginBottom: 12 }}>
-                <h3 style={{ fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5, fontWeight: 700, color: "#991B1B", marginBottom: 4 }}>
-                  ⚖️ Legal Disclaimer & Trademarks
+                <h3 style={{ fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5, fontWeight: 700, color: isDark ? '#FCA5A5' : '#991B1B', marginBottom: 4, display: "flex", alignItems: "center", gap: 4 }}>
+                  <Info size={13} /> Legal Disclaimer & Trademarks
                 </h3>
                 <p style={{ fontSize: 11.5, lineHeight: 1.45, color: isDark ? '#9CA3AF' : '#5B5A52' }}>
                   All product names, trademarks, and logos (Python, React, Docker, Kubernetes, AWS, PostgreSQL, MongoDB, etc.) belong to their respective owners and are referenced under fair use for educational purposes.

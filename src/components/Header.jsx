@@ -355,10 +355,10 @@ export function Header({
         }}
       >
         <span>
-          ⚡ <strong>Offline Ready:</strong> Install app to study offline without Wi-Fi. 💡 <em>Click <strong>Sync</strong> anytime to check for new topics & updates.</em>
+          <strong>Offline Mode Enabled:</strong> Install application for offline reference. <em>Click <strong>Sync</strong> anytime to check for updates.</em>
         </span>
         <span style={{ fontSize: 10, color: isDark ? "#6B7280" : "#8A8474" }}>
-          🌐 External links require internet
+          External links require an active network connection
         </span>
       </div>
 
@@ -382,7 +382,7 @@ export function Header({
           }}
         >
           <CheckCircle2 size={15} color="#3B82F6" />
-          <span>💡 Select <strong>"Save as PDF"</strong> under Destination in your print window!</span>
+          <span>Select <strong>"Save as PDF"</strong> under Destination in your print dialog.</span>
         </div>
       )}
 
@@ -429,7 +429,7 @@ export function Header({
           }}
         >
           <div style={{ fontWeight: 700, marginBottom: 4, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <span>📲 How to Install App</span>
+            <span>Application Installation Guide</span>
             <span style={{ cursor: "pointer", opacity: 0.7 }} onClick={() => setShowInstallHelp(false)}>✕</span>
           </div>
           <p style={{ color: "#CFC7B0" }}>

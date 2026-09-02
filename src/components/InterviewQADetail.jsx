@@ -130,7 +130,7 @@ export function InterviewQADetail({
               cursor: "pointer"
             }}
           >
-            {practiceMode ? "🎯 Practice Mode ON" : "👁 Study Mode"}
+            {practiceMode ? "Practice Mode" : "Study Mode"}
           </button>
         </div>
       </div>
@@ -143,7 +143,7 @@ export function InterviewQADetail({
       {/* WHAT HR EVALUATES */}
       <div style={{ background: isDark ? "#1E3A8A" : "#EFF6FF", borderLeft: `4px solid ${isDark ? "#3B82F6" : "#2563EB"}`, padding: "12px 16px", borderRadius: "0 6px 6px 0", marginBottom: 20 }}>
         <div style={{ fontSize: 10.5, fontWeight: 700, color: isDark ? "#93C5FD" : "#1D4ED8", textTransform: "uppercase", marginBottom: 2 }}>
-          🎯 What HR / Technical Recruiter Evaluates
+          Recruiter & Technical Evaluation Criteria
         </div>
         <div style={{ fontSize: 13, color: isDark ? "#DBEAFE" : "#1E40AF", lineHeight: 1.45 }}>
           {selectedQAItem.whatHREvaluates}
@@ -158,7 +158,7 @@ export function InterviewQADetail({
             <span style={{ fontSize: 14, fontWeight: 800, fontFamily: "monospace", color: timerSeconds < 10 ? "#DC2626" : (isDark ? "#FFF" : "#22262B") }}>
               00:{timerSeconds < 10 ? `0${timerSeconds}` : timerSeconds}
             </span>
-            <span style={{ fontSize: 11, color: isDark ? "#9CA3AF" : "#5B5A52" }}>(60s Answer Practice)</span>
+            <span style={{ fontSize: 11, color: isDark ? "#9CA3AF" : "#5B5A52" }}>(60s Practice Answer Timer)</span>
           </div>
 
           <div style={{ display: "flex", gap: 6 }}>
@@ -182,7 +182,7 @@ export function InterviewQADetail({
       <div style={{ marginBottom: 20 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
           <h2 style={{ fontSize: 13, textTransform: "uppercase", fontWeight: 700, color: isDark ? "#60A5FA" : "#33417A" }}>
-            🏆 Sample Winning Answer
+            Recommended Answer Structure
           </h2>
           {practiceMode && (
             <button onClick={() => toggleRevealAnswer(selectedQAItem.id)} style={{ border: "none", background: "transparent", color: isDark ? "#60A5FA" : "#33417A", cursor: "pointer", fontSize: 11, fontWeight: 700, display: "flex", alignItems: "center", gap: 4 }}>
@@ -198,7 +198,7 @@ export function InterviewQADetail({
           </div>
         ) : (
           <div style={{ background: isDark ? "#111827" : "#E3DECD", borderRadius: 6, padding: 16, textAlign: "center", color: isDark ? "#9CA3AF" : "#5B5A52", fontSize: 12, fontStyle: "italic", border: `1px dashed ${isDark ? "#374151" : "#CFC7B0"}` }}>
-            🙈 Answer hidden for Practice Mode. Try speaking your answer out loud for 60 seconds before revealing!
+            Answer hidden during Practice Mode. Formulate your response before revealing.
           </div>
         )}
       </div>
@@ -206,7 +206,7 @@ export function InterviewQADetail({
       {/* COACHING TIPS */}
       <div style={{ marginBottom: 24 }}>
         <h2 style={{ fontSize: 13, textTransform: "uppercase", fontWeight: 700, color: "#D97706", marginBottom: 6 }}>
-          💡 Strategy & Coaching Tip
+          Technical Strategy Tip
         </h2>
         <div style={{ background: isDark ? "#1F2937" : "#FEF3C7", border: `1px solid ${isDark ? "#374151" : "#FCD34D"}`, borderRadius: 6, padding: 12, fontSize: 12.5, color: isDark ? "#EDE9DE" : "#92400E", lineHeight: 1.5 }}>
           {selectedQAItem.remember}
@@ -216,7 +216,7 @@ export function InterviewQADetail({
       {/* QUESTION MASTERY STATUS */}
       <div style={{ background: isDark ? "#111827" : "#F8F5EE", border: `1px solid ${isDark ? "#374151" : "#CFC7B0"}`, borderRadius: 6, padding: 14, marginBottom: 24 }}>
         <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", color: isDark ? "#9CA3AF" : "#5B5A52", marginBottom: 8 }}>
-          Track Your Readiness
+          Track Readiness Status
         </div>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           {['unstudied', 'review', 'mastered'].map((st) => (
@@ -237,7 +237,7 @@ export function InterviewQADetail({
                 color: qaStatus[selectedQAItem.id] === st ? '#FFF' : (isDark ? '#EDE9DE' : '#22262B')
               }}
             >
-              {st === 'mastered' ? '✓ Mastered' : st === 'review' ? '⏳ Needs Review' : '🌱 Unstudied'}
+              {st === 'mastered' ? 'Verified' : st === 'review' ? 'Requires Review' : 'Unreviewed'}
             </button>
           ))}
         </div>

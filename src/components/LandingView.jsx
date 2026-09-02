@@ -28,13 +28,13 @@ export function LandingView({ setActiveMode, setSelectedTermKey, setSelectedQAId
     if (installPrompt) {
       handleInstallClick();
     } else {
-      alert("📲 To install HireReady Dev:\n• Chrome/Edge: Click the Install button in your address bar or browser menu.\n• iOS Safari: Tap Share (↑) -> 'Add to Home Screen'.");
+      alert("To install HireReady Dev:\n• Chrome / Edge: Click the Install icon in your browser address bar.\n• iOS Safari: Tap Share -> 'Add to Home Screen'.");
     }
   };
 
   return (
-    <div style={{ maxWidth: 880, margin: "0 auto" }} className="fg-sans fg-landing-view fg-no-print">
-      {/* HERO BANNER CARD */}
+    <div className="fg-sans" style={{ maxWidth: 1040, margin: "0 auto", width: "100%" }}>
+      {/* HERO BANNER SECTION */}
       <div
         style={{
           position: "relative",
@@ -81,7 +81,7 @@ export function LandingView({ setActiveMode, setSelectedTermKey, setSelectedQAId
             </a>
           </div>
           <h1 style={{ fontSize: 26, fontWeight: 800, letterSpacing: -0.4, color: "#FFFFFF", marginBottom: 6, lineHeight: 1.2 }}>
-            HireReady Dev — The Developer's IT Compendium
+            HireReady Dev — Technical Architecture & Interview Reference
           </h1>
           <p style={{ fontSize: 13.5, opacity: 0.9, color: "#CFC7B0", maxWidth: 640, lineHeight: 1.5 }}>
             The ultimate offline-first web application for full-stack IT knowledge, system design architecture, dev toolchains, and job interview readiness.
@@ -245,7 +245,7 @@ export function LandingView({ setActiveMode, setSelectedTermKey, setSelectedQAId
           </div>
           <div>
             <h3 style={{ fontSize: 15, fontWeight: 800, color: isDark ? '#A7F3D0' : '#065F46', marginBottom: 2 }}>
-              📄 1-Column ATS Single-Column Resume Builder & Educational Notes
+              ATS Resume Builder & Specification
             </h3>
             <p style={{ fontSize: 12, color: isDark ? '#D1D5DB' : '#047857', margin: 0 }}>
               Build ATS-friendly single-column resumes that pass Workday, Greenhouse, Lever, and Taleo scanners with 99%+ parsing accuracy.

@@ -42,7 +42,7 @@ export function FeedbackModal({ onClose, theme }) {
         },
         body: JSON.stringify({
           access_key: ACCESS_KEY,
-          subject: "📬 New Anonymous Feedback from HireReady Dev",
+          subject: "New User Feedback - HireReady Dev",
           message: message,
           replyto: email.trim() ? email.trim() : "anonymous@hireready.dev",
           from_name: "HireReady Dev Reader"

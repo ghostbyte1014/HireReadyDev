@@ -151,7 +151,7 @@ export function PdfPreviewModal({
             {activeMode === 'guide' && selectedGuideEntry && (
               <div>
                 <div style={{ fontSize: 10.5, fontWeight: 700, color: selectedGuideEntry.color, textTransform: "uppercase", marginBottom: 4 }}>
-                  {selectedGuideEntry.domain} &bull; {depthLevel === 'starter' ? '🌱 Starter View' : '🔬 Deeper View'}
+                  {selectedGuideEntry.domain} &bull; {depthLevel === 'starter' ? 'Overview' : 'Specifications'}
                 </div>
                 <h1 style={{ fontSize: 24, fontWeight: 800, color: "#111827", marginBottom: 8, lineHeight: 1.2 }}>
                   {selectedGuideEntry.term}
@@ -210,7 +210,7 @@ export function PdfPreviewModal({
                 <div style={{ marginBottom: 16 }}>
                   <div style={{ fontSize: 11, fontWeight: 700, color: "#374151", textTransform: "uppercase", marginBottom: 4 }}>Strategy & Coaching Tip</div>
                   <div style={{ fontSize: 12.5, color: "#374151", background: "#FEF3C7", padding: 10, borderRadius: 6, border: "1px solid #FCD34D" }}>
-                    💡 {selectedQAItem.remember}
+                    Strategy Tip: {selectedQAItem.remember}
                   </div>
                 </div>
               </div>
@@ -220,7 +220,7 @@ export function PdfPreviewModal({
             {noteContent && (
               <div style={{ marginTop: 18, paddingTop: 14, borderTop: "1px dashed #D1D5DB" }}>
                 <div style={{ fontSize: 11, fontWeight: 700, color: "#059669", textTransform: "uppercase", marginBottom: 4 }}>
-                  📝 My Personal Study Notes
+                  Personal Study Notes
                 </div>
                 <div style={{ fontSize: 12.5, background: "#ECFDF5", padding: 10, borderRadius: 6, border: "1px solid #A7F3D0", color: "#065F46", whiteSpace: "pre-wrap" }}>
                   {noteContent}

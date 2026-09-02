@@ -478,10 +478,13 @@ export function AtsResumeModal({ onClose, theme }) {
                 fontSize: 10.5,
                 fontWeight: 700,
                 cursor: "pointer",
-                whiteSpace: "nowrap"
+                whiteSpace: "nowrap",
+                display: "flex",
+                alignItems: "center",
+                gap: 4
               }}
             >
-              📄 Builder
+              <Layout size={12} /> Builder
             </button>
             <button
               onClick={() => setActiveTab('guidance')}
@@ -494,10 +497,13 @@ export function AtsResumeModal({ onClose, theme }) {
                 fontSize: 10.5,
                 fontWeight: 700,
                 cursor: "pointer",
-                whiteSpace: "nowrap"
+                whiteSpace: "nowrap",
+                display: "flex",
+                alignItems: "center",
+                gap: 4
               }}
             >
-              🎓 ATS Guidance
+              <BookOpen size={12} /> ATS Guidance
             </button>
           </div>
         </div>
@@ -1085,7 +1091,7 @@ export function AtsResumeModal({ onClose, theme }) {
             <div style={{ maxWidth: 800, margin: "0 auto", lineHeight: 1.6 }}>
               <div style={{ background: isDark ? '#111827' : '#FEF3C7', border: `1px solid ${isDark ? '#374151' : '#FCD34D'}`, borderRadius: 8, padding: 18, marginBottom: 20 }}>
                 <h3 style={{ fontSize: 16, fontWeight: 800, color: isDark ? '#FDE047' : '#92400E', marginBottom: 6, display: "flex", alignItems: "center", gap: 8 }}>
-                  🎓 Why Single-Column Resumes Beat 2-Column Templates
+                  <BookOpen size={18} /> Single-Column vs 2-Column Resumes
                 </h3>
                 <p style={{ fontSize: 13, color: isDark ? '#D1D5DB' : '#78350F' }}>
                   Many job seekers pick fancy 2-column graphics templates thinking they look stylish. However, modern automated Applicant Tracking Systems (ATS) reject or mangle 80%+ of 2-column resumes!
@@ -1096,7 +1102,7 @@ export function AtsResumeModal({ onClose, theme }) {
                 {/* 1-COLUMN PROS */}
                 <div style={{ background: isDark ? '#064E3B' : '#ECFDF5', border: `1px solid ${isDark ? '#047857' : '#A7F3D0'}`, borderRadius: 8, padding: 16 }}>
                   <div style={{ fontWeight: 800, color: isDark ? '#A7F3D0' : '#065F46', marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
-                    <CheckCircle2 size={18} /> ✅ Single-Column Layout (ATS Safe)
+                    <CheckCircle2 size={18} /> Single-Column Layout (ATS Compliant)
                   </div>
                   <ul style={{ fontSize: 12, paddingLeft: 16, color: isDark ? '#D1D5DB' : '#047857', lineHeight: 1.5 }}>
                     <li style={{ marginBottom: 6 }}><strong>100% Linear ATS Parsing:</strong> Reads top-to-bottom without line jumping.</li>
@@ -1109,7 +1115,7 @@ export function AtsResumeModal({ onClose, theme }) {
                 {/* 2-COLUMN CONS */}
                 <div style={{ background: isDark ? '#7F1D1D' : '#FEF2F2', border: `1px solid ${isDark ? '#991B1B' : '#FCA5A5'}`, borderRadius: 8, padding: 16 }}>
                   <div style={{ fontWeight: 800, color: isDark ? '#FCA5A5' : '#991B1B', marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
-                    <AlertCircle size={18} /> ❌ 2-Column / Graphics Templates (High Risk)
+                    <AlertCircle size={18} /> 2-Column & Graphics Templates (High Risk)
                   </div>
                   <ul style={{ fontSize: 12, paddingLeft: 16, color: isDark ? '#D1D5DB' : '#991B1B', lineHeight: 1.5 }}>
                     <li style={{ marginBottom: 6 }}><strong>Column Merging Collisions:</strong> ATS reads across columns horizontally, mixing skill lists into company names.</li>
@@ -1122,8 +1128,8 @@ export function AtsResumeModal({ onClose, theme }) {
 
               {/* GOOGLE X-Y-Z FORMULA GUIDANCE */}
               <div style={{ background: isDark ? '#111827' : '#FFF', border: `1px solid ${isDark ? '#374151' : '#CFC7B0'}`, borderRadius: 8, padding: 18 }}>
-                <h4 style={{ fontSize: 14, fontWeight: 800, color: isDark ? '#60A5FA' : '#33417A', marginBottom: 6 }}>
-                  🚀 Google's X-Y-Z Formula for Winning Experience Bullets
+                <h4 style={{ fontSize: 14, fontWeight: 800, color: isDark ? '#60A5FA' : '#33417A', marginBottom: 6, display: "flex", alignItems: "center", gap: 6 }}>
+                  <Sparkles size={16} /> Google's X-Y-Z Formula for Winning Experience Bullets
                 </h4>
                 <p style={{ fontSize: 12.5, color: isDark ? '#D1D5DB' : '#374151', marginBottom: 10 }}>
                   Never write passive job descriptions like <em>"Responsible for writing code"</em>. Instead, use Google's proven formula:

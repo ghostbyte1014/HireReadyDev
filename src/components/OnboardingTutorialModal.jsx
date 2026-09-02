@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BookOpen, HelpCircle, UserCheck, ShieldCheck, ArrowRight, ArrowLeft, X, Sparkles, CheckCircle2, Bookmark, Edit3, Search, Clock, Download, Upload } from 'lucide-react';
+import { BookOpen, HelpCircle, UserCheck, ShieldCheck, ArrowRight, ArrowLeft, X, Sparkles, CheckCircle2, Bookmark, Edit3, Search, Clock, Download, Upload, Layers, Cpu } from 'lucide-react';
 
 export function OnboardingTutorialModal({ onClose, onComplete, theme }) {
   const isDark = theme === 'dark';
@@ -7,17 +7,17 @@ export function OnboardingTutorialModal({ onClose, onComplete, theme }) {
 
   const tutorialSteps = [
     {
-      title: "👋 Welcome to HireReady Dev!",
+      title: "Welcome to HireReady Dev",
       subtitle: "The Developer's IT Compendium & Interview Masterclass",
-      icon: <Sparkles size={28} color="#60A5FA" />,
+      icon: <Sparkles size={26} color="#60A5FA" />,
       content: (
         <div>
           <p style={{ fontSize: 13.5, lineHeight: 1.6, color: isDark ? '#D1D5DB' : '#374151', marginBottom: 14 }}>
             HireReady Dev is an <strong>offline-first Progressive Web App (PWA)</strong> engineered to take software engineers, IT professionals, and students from syntax fundamentals to system design mastery and interview readiness.
           </p>
           <div style={{ background: isDark ? '#111827' : '#F8F5EE', padding: 14, borderRadius: 8, border: `1px solid ${isDark ? '#374151' : '#CFC7B0'}`, fontSize: 12.5 }}>
-            <div style={{ fontWeight: 800, color: isDark ? '#A7F3D0' : '#065F46', marginBottom: 6 }}>
-              🌟 Core Capabilities:
+            <div style={{ fontWeight: 800, color: isDark ? '#A7F3D0' : '#065F46', marginBottom: 6, display: "flex", alignItems: "center", gap: 5 }}>
+              <CheckCircle2 size={15} /> Core Capabilities:
             </div>
             <ul style={{ paddingLeft: 18, margin: 0, color: isDark ? '#9CA3AF' : '#5B5A52', lineHeight: 1.5 }}>
               <li><strong>16 Core IT Domains & 86+ Topics:</strong> Deep dives, Starter vs Deeper levels, and live JS sandboxes.</li>
@@ -30,9 +30,9 @@ export function OnboardingTutorialModal({ onClose, onComplete, theme }) {
       )
     },
     {
-      title: "📚 IT Field Guide & Sandboxes",
+      title: "IT Field Guide & Sandboxes",
       subtitle: "Explore 16 Core IT Domains & Live Code Execution",
-      icon: <BookOpen size={28} color="#60A5FA" />,
+      icon: <BookOpen size={26} color="#60A5FA" />,
       content: (
         <div>
           <p style={{ fontSize: 13.5, lineHeight: 1.6, color: isDark ? '#D1D5DB' : '#374151', marginBottom: 14 }}>
@@ -40,11 +40,15 @@ export function OnboardingTutorialModal({ onClose, onComplete, theme }) {
           </p>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 14 }}>
             <div style={{ background: isDark ? '#111827' : '#FFF', padding: 12, borderRadius: 6, border: `1px solid ${isDark ? '#374151' : '#CFC7B0'}`, fontSize: 12 }}>
-              <div style={{ fontWeight: 700, color: isDark ? '#60A5FA' : '#33417A', marginBottom: 4 }}>🌱 Starter vs 🔬 Deeper</div>
+              <div style={{ fontWeight: 700, color: isDark ? '#60A5FA' : '#33417A', marginBottom: 4, display: "flex", alignItems: "center", gap: 4 }}>
+                <Layers size={13} /> Starter vs Deeper
+              </div>
               <div style={{ color: isDark ? '#9CA3AF' : '#5B5A52', lineHeight: 1.4 }}>Toggle between high-level executive summaries and deep technical trade-off analyses.</div>
             </div>
             <div style={{ background: isDark ? '#111827' : '#FFF', padding: 12, borderRadius: 6, border: `1px solid ${isDark ? '#374151' : '#CFC7B0'}`, fontSize: 12 }}>
-              <div style={{ fontWeight: 700, color: isDark ? '#60A5FA' : '#33417A', marginBottom: 4 }}>⚡ Live Sandboxes</div>
+              <div style={{ fontWeight: 700, color: isDark ? '#60A5FA' : '#33417A', marginBottom: 4, display: "flex", alignItems: "center", gap: 4 }}>
+                <Cpu size={13} /> Live Sandboxes
+              </div>
               <div style={{ color: isDark ? '#9CA3AF' : '#5B5A52', lineHeight: 1.4 }}>Test live JavaScript code snippets directly in your browser with real console output.</div>
             </div>
           </div>
@@ -52,9 +56,9 @@ export function OnboardingTutorialModal({ onClose, onComplete, theme }) {
       )
     },
     {
-      title: "🔖 Bookmarks, Favorites & Personal Notes",
+      title: "Bookmarks, Favorites & Personal Notes",
       subtitle: "Save Topics & Keep Your Own Study Notebook",
-      icon: <Bookmark size={28} color="#F59E0B" />,
+      icon: <Bookmark size={26} color="#F59E0B" />,
       content: (
         <div>
           <p style={{ fontSize: 13.5, lineHeight: 1.6, color: isDark ? '#D1D5DB' : '#374151', marginBottom: 14 }}>
@@ -82,16 +86,18 @@ export function OnboardingTutorialModal({ onClose, onComplete, theme }) {
       )
     },
     {
-      title: "🎯 Technical Interview Q&A Practice",
+      title: "Technical Interview Q&A Practice",
       subtitle: "Master Real HR & Technical Questions with 60s Timers",
-      icon: <HelpCircle size={28} color="#059669" />,
+      icon: <HelpCircle size={26} color="#059669" />,
       content: (
         <div>
           <p style={{ fontSize: 13.5, lineHeight: 1.6, color: isDark ? '#D1D5DB' : '#374151', marginBottom: 14 }}>
             Practice 70+ categorized interview questions with sample answers, recruiter evaluation notes, and interactive practice tools.
           </p>
           <div style={{ background: isDark ? '#111827' : '#F8F5EE', padding: 12, borderRadius: 8, border: `1px solid ${isDark ? '#374151' : '#CFC7B0'}`, fontSize: 12.5 }}>
-            <div style={{ fontWeight: 700, color: "#059669", marginBottom: 6 }}>⏱️ Interactive Practice Tools:</div>
+            <div style={{ fontWeight: 700, color: "#059669", marginBottom: 6, display: "flex", alignItems: "center", gap: 5 }}>
+              <Clock size={14} /> Interactive Practice Tools:
+            </div>
             <ul style={{ paddingLeft: 18, margin: 0, color: isDark ? '#9CA3AF' : '#5B5A52', lineHeight: 1.5 }}>
               <li><strong>60s Practice Answer Timer:</strong> Simulate real interview pressure.</li>
               <li><strong>Self-Evaluation Tracking:</strong> Mark questions as <em>Review Needed</em>, <em>Practicing</em>, or <em>Mastered</em>.</li>
@@ -102,16 +108,16 @@ export function OnboardingTutorialModal({ onClose, onComplete, theme }) {
       )
     },
     {
-      title: "📄 1-Column ATS Resume Builder",
+      title: "1-Column ATS Resume Builder",
       subtitle: "Build Resumes That Beat Automated Scanners",
-      icon: <UserCheck size={28} color="#3B82F6" />,
+      icon: <UserCheck size={26} color="#3B82F6" />,
       content: (
         <div>
           <p style={{ fontSize: 13.5, lineHeight: 1.6, color: isDark ? '#D1D5DB' : '#374151', marginBottom: 14 }}>
-            Create single-column resumes optimized for Workday, Greenhouse, Lever, and Taleo ATS scanners with **99%+ parsing accuracy**.
+            Create single-column resumes optimized for Workday, Greenhouse, Lever, and Taleo ATS scanners with <strong>99%+ parsing accuracy</strong>.
           </p>
           <div style={{ background: isDark ? '#111827' : '#FFF', padding: 12, borderRadius: 8, border: `1px solid ${isDark ? '#374151' : '#CFC7B0'}`, fontSize: 12 }}>
-            <div style={{ fontWeight: 700, color: isDark ? '#60A5FA' : '#33417A', marginBottom: 4 }}>🎨 5 ATS Templates & Custom Styling</div>
+            <div style={{ fontWeight: 700, color: isDark ? '#60A5FA' : '#33417A', marginBottom: 4 }}>5 ATS Templates & Custom Styling</div>
             <p style={{ color: isDark ? '#9CA3AF' : '#5B5A52', margin: 0, lineHeight: 1.45 }}>
               Choose from Standard Tech, Modern Slate, Harvard Academic, Compact Dev, and Project-First templates. Customize header alignment, colors, and export to PDF in 1 click!
             </p>
@@ -120,9 +126,9 @@ export function OnboardingTutorialModal({ onClose, onComplete, theme }) {
       )
     },
     {
-      title: "⚡ Offline PWA, Backups & Docs Index",
+      title: "Offline PWA, Backups & Docs Index",
       subtitle: "Study Anywhere & Keep Data Backed Up",
-      icon: <ShieldCheck size={28} color="#D97706" />,
+      icon: <ShieldCheck size={26} color="#D97706" />,
       content: (
         <div>
           <p style={{ fontSize: 13.5, lineHeight: 1.6, color: isDark ? '#D1D5DB' : '#374151', marginBottom: 14 }}>
@@ -297,7 +303,7 @@ export function OnboardingTutorialModal({ onClose, onComplete, theme }) {
               }}
             >
               {currentStep === tutorialSteps.length - 1 ? (
-                <>🚀 Finish & Start Exploring</>
+                <>Finish & Start Exploring <ArrowRight size={14} /></>
               ) : (
                 <>Next Step <ArrowRight size={14} /></>
               )}

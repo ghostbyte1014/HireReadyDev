@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ExternalLink, WifiOff, X, Wifi, Edit3, Bookmark, Play, Check } from 'lucide-react';
+import { ExternalLink, WifiOff, X, Wifi, Edit3, Bookmark, Play, Check, Code, Terminal } from 'lucide-react';
 
 export function FieldGuideDetail({
   selectedGuideEntry,
@@ -12,7 +12,7 @@ export function FieldGuideDetail({
   theme
 }) {
   const [offlineModalUrl, setOfflineModalUrl] = useState(null);
-  const [activeCodePreview, setActiveCodePreview] = useState(null);
+  const [activeCodeIndex, setActiveCodeIndex] = useState(null);
   const [noteSavedToast, setNoteSavedToast] = useState(false);
 
   const isDark = theme === 'dark';
@@ -35,16 +35,118 @@ export function FieldGuideDetail({
     setTimeout(() => setNoteSavedToast(false), 1500);
   };
 
-  const getIframeSrcDoc = (code) => {
-    if (!code) return '';
-    const safeCode = code.replace(/console\.log\((.*?)\)/g, 'document.body.innerHTML += "<p style=\'font-family:monospace;color:#10B981;\'>" + ($1) + "</p>";');
-    return `<!DOCTYPE html><html><body style="background:#000;color:#FFF;margin:8px;">
+  const detectLanguage = (codeText) => {
+    if (!codeText) return 'Code Spec';
+    const code = codeText.trim();
+    if (code.startsWith('apiVersion:') || code.includes('kind:') || code.includes('metadata:')) return 'YAML Spec';
+    if (code.includes('class ') || code.includes('def ') || code.includes('import pandas') || code.includes('import numpy') || code.includes('elif ')) return 'Python';
+    if (code.startsWith('SELECT') || code.startsWith('INSERT') || code.startsWith('CREATE TABLE') || code.startsWith('UPDATE ') || code.includes('JOIN ')) return 'SQL Query';
+    if (code.startsWith('FROM ') || code.startsWith('RUN ') || code.startsWith('docker ') || code.includes('docker-compose')) return 'Docker Config';
+    if (code.startsWith('git ') || code.startsWith('kubectl ') || code.startsWith('curl ') || code.startsWith('npm ') || code.startsWith('npx ')) return 'Shell Command';
+    if (code.includes('<html') || code.includes('<div') || code.includes('<!DOCTYPE')) return 'HTML Document';
+    if (code.includes(' {') && (code.includes('color:') || code.includes('margin:') || code.includes('background:'))) return 'CSS Styles';
+    if (
+      code.includes('console.log') ||
+      code.includes('let ') ||
+      code.includes('const ') ||
+      code.includes('var ') ||
+      code.includes('function') ||
+      code.includes('=>') ||
+      code.includes('async ') ||
+      code.includes('fetch(') ||
+      code.includes('JSON.') ||
+      code.includes('document.') ||
+      code.includes('window.') ||
+      code.includes('Math.') ||
+      code.includes('for (') ||
+      code.includes('if (')
+    ) {
+      return 'JavaScript';
+    }
+    return 'Code Spec';
+  };
+
+  const isExecutableCode = (codeText) => {
+    const lang = detectLanguage(codeText);
+    if (lang !== 'JavaScript') return false;
+    const code = codeText.trim();
+    // Do not attempt to eval YAML specs, Python classes, or colon configs
+    if (code.startsWith('apiVersion:') || code.includes('kind:') || code.includes('class ')) return false;
+    return true;
+  };
+
+  const getIframeSrcDoc = (codeText) => {
+    if (!codeText) return '';
+    const lang = detectLanguage(codeText);
+
+    let code = codeText;
+    if (lang === 'Python') {
+      // Transpile basic Python print & control flow syntax for browser JS execution
+      code = code
+        .replace(/print\((.*?)\)/g, 'console.log($1)')
+        .replace(/if\s+(.*?):/g, 'if ($1) {')
+        .replace(/elif\s+(.*?):/g, '} else if ($1) {')
+        .replace(/else:/g, '} else {')
+        .replace(/True/g, 'true')
+        .replace(/False/g, 'false');
+
+      const openCount = (code.match(/\{/g) || []).length;
+      const closeCount = (code.match(/\}/g) || []).length;
+      for (let i = 0; i < openCount - closeCount; i++) {
+        code += '\n}';
+      }
+    }
+
+    return `<!DOCTYPE html><html><head><style>
+      body { background: #0F172A; color: #F8FAFC; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; margin: 0; padding: 10px; line-height: 1.5; }
+      .log { color: #10B981; margin: 3px 0; white-space: pre-wrap; word-break: break-all; }
+      .err { color: #F87171; margin: 3px 0; white-space: pre-wrap; word-break: break-all; }
+      .info { color: #64748B; font-style: italic; margin-top: 4px; }
+    </style></head><body>
+<div id="output"></div>
 <script>
-try {
-  ${safeCode}
-} catch(e) {
-  document.body.innerHTML += "<p style='color:#F87171;font-family:monospace;'>Error: " + e.message + "</p>";
-}
+(function() {
+  var outputEl = document.getElementById('output');
+  var logged = false;
+  
+  function appendLog(msg, isErr, isInfo) {
+    logged = true;
+    var p = document.createElement('div');
+    p.className = isErr ? 'err' : (isInfo ? 'info' : 'log');
+    p.textContent = (isErr ? 'Error: ' : (isInfo ? '' : '> ')) + msg;
+    outputEl.appendChild(p);
+  }
+
+  var customLog = function() {
+    var args = Array.prototype.slice.call(arguments).map(function(arg) {
+      if (typeof arg === 'object') {
+        try { return JSON.stringify(arg, null, 2); } catch(e) { return String(arg); }
+      }
+      return String(arg);
+    }).join(' ');
+    appendLog(args, false, false);
+  };
+
+  console.log = customLog;
+  console.info = customLog;
+  console.error = function(msg) {
+    appendLog(String(msg), true, false);
+  };
+
+  var userScript = ${JSON.stringify(code)};
+  try {
+    var res = eval(userScript);
+    if (!logged) {
+      if (res !== undefined && typeof res !== 'function') {
+        appendLog(typeof res === 'object' ? JSON.stringify(res, null, 2) : String(res), false, false);
+      } else {
+        appendLog('✓ Script executed cleanly with 0 errors.', false, true);
+      }
+    }
+  } catch(err) {
+    appendLog(err.message, true, false);
+  }
+})();
 </script>
 </body></html>`;
   };
@@ -79,18 +181,18 @@ try {
               fontSize: 11.5,
               fontWeight: 600,
               cursor: "pointer",
-              display: "inline-flex",
+              display: "flex",
               alignItems: "center",
               gap: 4
             }}
           >
-            <Bookmark size={12} fill={isBookmarked ? "#D97706" : "none"} />
-            {isBookmarked ? "Saved to Favorites" : "Save Bookmark"}
+            <Bookmark size={13} fill={isBookmarked ? '#D97706' : 'none'} />
+            {isBookmarked ? 'Bookmarked' : 'Bookmark'}
           </button>
         </div>
 
-        {/* Depth Toggle (Starter vs Deeper) */}
-        <div style={{ display: "flex", background: isDark ? "#1F2937" : "#E3DECD", borderRadius: 4, padding: 2 }} className="fg-sans">
+        {/* Starter vs Deeper Depth Toggle */}
+        <div style={{ display: "flex", background: isDark ? '#1F2937' : '#F1EDE0', padding: 2, borderRadius: 4, border: `1px solid ${isDark ? '#374151' : '#CFC7B0'}` }}>
           <button
             onClick={() => setDepthLevel("starter")}
             style={{
@@ -104,7 +206,7 @@ try {
               fontWeight: 600
             }}
           >
-            🌱 Starter View
+            Overview
           </button>
           <button
             onClick={() => setDepthLevel("deeper")}
@@ -119,7 +221,7 @@ try {
               fontWeight: 600
             }}
           >
-            🔬 Deeper View
+            Specifications
           </button>
         </div>
       </div>
@@ -128,117 +230,144 @@ try {
         {selectedGuideEntry.term}
       </h1>
 
-      <p
+      {/* Meaning Banner */}
+      <div
         className="fg-sans"
         style={{
           fontSize: 14.5,
+          lineHeight: 1.5,
           fontStyle: "italic",
-          lineHeight: 1.55,
-          color: isDark ? '#9CA3AF' : '#5B5A52',
-          marginBottom: 20
+          background: isDark ? '#1F2937' : '#F1EDE0',
+          borderLeft: `4px solid ${selectedGuideEntry.color}`,
+          padding: "10px 14px",
+          borderRadius: "0 4px 4px 0",
+          marginBottom: 20,
+          color: isDark ? '#D1D5DB' : '#3A3D34'
         }}
       >
         "{selectedGuideEntry.meaning}"
-      </p>
+      </div>
 
-      {/* STARTER VS DEEPER DYNAMIC CONTENT CALLOUT */}
-      {depthLevel === "starter" && selectedGuideEntry.starter && (
-        <div
-          className="fg-sans"
-          style={{
-            background: isDark ? '#1F2937' : '#F8F5EE',
-            borderLeft: `4px solid ${selectedGuideEntry.color}`,
-            borderRadius: "0 6px 6px 0",
-            padding: "14px 18px",
-            marginBottom: 24
-          }}
-        >
-          <div style={{ fontSize: 11, fontWeight: 700, color: isDark ? '#9CA3AF' : '#8A8474', textTransform: "uppercase", marginBottom: 4 }}>
-            Quick Summary (30-Second Skim)
+      {/* Purpose Card */}
+      <div
+        style={{
+          background: isDark ? '#111827' : '#F8F5EE',
+          border: `1px solid ${isDark ? '#374151' : '#E3DECD'}`,
+          borderRadius: 6,
+          padding: 16,
+          marginBottom: 24
+        }}
+      >
+        <div className="fg-sans" style={{ fontSize: 11, color: isDark ? '#9CA3AF' : '#8A8474', textTransform: "uppercase", fontWeight: 700, marginBottom: 4 }}>
+          Core Objective & Purpose
+        </div>
+        <div style={{ fontSize: 14, lineHeight: 1.55, color: isDark ? '#EDE9DE' : '#22262B', fontWeight: 500 }}>
+          {selectedGuideEntry.purpose}
+        </div>
+      </div>
+
+      {/* DYNAMIC STARTER VIEW CONTENT */}
+      {depthLevel === 'starter' && selectedGuideEntry.starter && (
+        <div style={{ marginBottom: 24 }}>
+          <div className="fg-sans" style={{ fontSize: 12, color: isDark ? '#9CA3AF' : '#8A8474', textTransform: "uppercase", fontWeight: 700, marginBottom: 8 }}>
+            Executive Summary
           </div>
-          <div style={{ fontSize: 14, lineHeight: 1.5, color: isDark ? '#EDE9DE' : '#22262B', fontWeight: 500, marginBottom: 8 }}>
+          <p className="fg-sans" style={{ fontSize: 14, lineHeight: 1.6, color: isDark ? '#D1D5DB' : '#3A3D34', marginBottom: 16 }}>
             {selectedGuideEntry.starter.summary}
-          </div>
-          {selectedGuideEntry.starter.quickExample && (
-            <div className="fg-mono" style={{ background: "#22262B", color: "#E7E2D3", padding: "6px 10px", borderRadius: 4, fontSize: 12 }}>
-              {selectedGuideEntry.starter.quickExample}
+          </p>
+
+          {/* Quick Syntax */}
+          {selectedGuideEntry.starter.quickSyntax && (
+            <div style={{ marginBottom: 18 }}>
+              <div className="fg-sans" style={{ fontSize: 11.5, color: isDark ? '#9CA3AF' : '#8A8474', fontWeight: 700, marginBottom: 6 }}>
+                Quick Syntax / Command Pattern:
+              </div>
+              <pre
+                className="fg-mono"
+                style={{
+                  background: "#22262B",
+                  color: "#A7F3D0",
+                  padding: "10px 14px",
+                  borderRadius: 4,
+                  fontSize: 12.5,
+                  overflowX: "auto",
+                  margin: 0,
+                  border: "1px solid #334155"
+                }}
+              >
+                {selectedGuideEntry.starter.quickSyntax}
+              </pre>
+            </div>
+          )}
+
+          {/* Functions List */}
+          {selectedGuideEntry.functions && selectedGuideEntry.functions.length > 0 && (
+            <div style={{ marginBottom: 18 }}>
+              <div className="fg-sans" style={{ fontSize: 11.5, color: isDark ? '#9CA3AF' : '#8A8474', fontWeight: 700, marginBottom: 6 }}>
+                Primary Functions:
+              </div>
+              <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13.5, lineHeight: 1.55, color: isDark ? '#D1D5DB' : '#3A3D34' }}>
+                {selectedGuideEntry.functions.map((fn, idx) => (
+                  <li key={idx} style={{ marginBottom: 4 }}>{fn}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Objectives List */}
+          {selectedGuideEntry.objectives && selectedGuideEntry.objectives.length > 0 && (
+            <div>
+              <div className="fg-sans" style={{ fontSize: 11.5, color: isDark ? '#9CA3AF' : '#8A8474', fontWeight: 700, marginBottom: 6 }}>
+                Engineering Objectives:
+              </div>
+              <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13.5, lineHeight: 1.55, color: isDark ? '#D1D5DB' : '#3A3D34' }}>
+                {selectedGuideEntry.objectives.map((obj, idx) => (
+                  <li key={idx} style={{ marginBottom: 4 }}>{obj}</li>
+                ))}
+              </ul>
             </div>
           )}
         </div>
       )}
 
-      {depthLevel === "deeper" && selectedGuideEntry.deeper && (
-        <div
-          className="fg-sans"
-          style={{
-            background: isDark ? '#1F2937' : '#F1EDE0',
-            border: `1px solid ${isDark ? '#374151' : '#CFC7B0'}`,
-            borderRadius: 6,
-            padding: "14px 18px",
-            marginBottom: 24
-          }}
-        >
-          <div style={{ fontSize: 11, fontWeight: 700, color: isDark ? '#9CA3AF' : '#8A8474', textTransform: "uppercase", marginBottom: 6 }}>
-            Architectural Tradeoffs & Edge Cases
+      {/* DYNAMIC DEEPER VIEW CONTENT */}
+      {depthLevel === 'deeper' && selectedGuideEntry.deeper && (
+        <div style={{ marginBottom: 24 }}>
+          <div className="fg-sans" style={{ fontSize: 12, color: isDark ? '#9CA3AF' : '#8A8474', textTransform: "uppercase", fontWeight: 700, marginBottom: 8 }}>
+            Architectural Deep Dive & Trade-offs
           </div>
-          <div style={{ fontSize: 13.5, lineHeight: 1.5, color: isDark ? '#D1D5DB' : '#3A3D34', marginBottom: 6 }}>
-            <strong>Tradeoffs:</strong> {selectedGuideEntry.deeper.tradeoffs}
-          </div>
-          <div style={{ fontSize: 13.5, lineHeight: 1.5, color: "#F87171" }}>
-            <strong>Gotchas / Edge Cases:</strong> {selectedGuideEntry.deeper.edgeCases}
-          </div>
+          <p className="fg-sans" style={{ fontSize: 14, lineHeight: 1.6, color: isDark ? '#D1D5DB' : '#3A3D34', marginBottom: 16 }}>
+            {selectedGuideEntry.deeper.architecture}
+          </p>
+
+          {/* Gotchas & Edge Cases */}
+          {selectedGuideEntry.deeper.gotchas && selectedGuideEntry.deeper.gotchas.length > 0 && (
+            <div style={{ background: isDark ? '#1F2937' : '#FEF2F2', borderLeft: "4px solid #EF4444", padding: 14, borderRadius: "0 4px 4px 0", marginBottom: 18 }}>
+              <div className="fg-sans" style={{ fontSize: 11, fontWeight: 700, color: "#EF4444", textTransform: "uppercase", marginBottom: 6 }}>
+                Production Gotchas & Failure Modes:
+              </div>
+              <ul style={{ paddingLeft: 16, margin: 0, fontSize: 13, lineHeight: 1.5, color: isDark ? '#FCA5A5' : '#991B1B' }}>
+                {selectedGuideEntry.deeper.gotchas.map((g, idx) => (
+                  <li key={idx} style={{ marginBottom: 4 }}>{g}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Trade-offs & Comparisons */}
+          {selectedGuideEntry.deeper.tradeoffs && selectedGuideEntry.deeper.tradeoffs.length > 0 && (
+            <div style={{ background: isDark ? '#111827' : '#EFF6FF', borderLeft: "4px solid #3B82F6", padding: 14, borderRadius: "0 4px 4px 0", marginBottom: 18 }}>
+              <div className="fg-sans" style={{ fontSize: 11, fontWeight: 700, color: "#3B82F6", textTransform: "uppercase", marginBottom: 6 }}>
+                Technical Trade-offs:
+              </div>
+              <ul style={{ paddingLeft: 16, margin: 0, fontSize: 13, lineHeight: 1.5, color: isDark ? '#93C5FD' : '#1E40AF' }}>
+                {selectedGuideEntry.deeper.tradeoffs.map((t, idx) => (
+                  <li key={idx} style={{ marginBottom: 4 }}>{t}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
-      )}
-
-      {/* Purpose Section */}
-      <div className="fg-sans" style={{ fontSize: 12, color: isDark ? '#9CA3AF' : '#8A8474', textTransform: "uppercase", fontWeight: 700, marginBottom: 6 }}>
-        Purpose & Core Use Case
-      </div>
-      <p
-        style={{
-          fontSize: 16.5,
-          lineHeight: 1.6,
-          color: isDark ? '#D1D5DB' : '#3A3D34',
-          marginBottom: 24,
-          borderLeft: `2px solid ${isDark ? '#4B5563' : '#CFC7B0'}`,
-          paddingLeft: 16
-        }}
-      >
-        {selectedGuideEntry.purpose}
-      </p>
-
-      {/* Functions / How It Works */}
-      {selectedGuideEntry.functions && (
-        <>
-          <div className="fg-sans" style={{ fontSize: 12, color: isDark ? '#9CA3AF' : '#8A8474', textTransform: "uppercase", fontWeight: 700, marginBottom: 8 }}>
-            How It Works / Core Mechanisms
-          </div>
-          <ul style={{ marginBottom: 24, paddingLeft: 0, listStyle: "none" }}>
-            {selectedGuideEntry.functions.map((p, i) => (
-              <li key={i} style={{ display: "flex", gap: 10, fontSize: 15, lineHeight: 1.5, marginBottom: 8, color: isDark ? '#D1D5DB' : '#22262B' }}>
-                <span style={{ color: selectedGuideEntry.color, flexShrink: 0 }}>—</span>
-                <span>{p}</span>
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
-
-      {/* Learning Objectives */}
-      {selectedGuideEntry.objectives && (
-        <>
-          <div className="fg-sans" style={{ fontSize: 12, color: isDark ? '#9CA3AF' : '#8A8474', textTransform: "uppercase", fontWeight: 700, marginBottom: 8 }}>
-            Learning Objectives
-          </div>
-          <ul style={{ marginBottom: 24, paddingLeft: 0, listStyle: "none" }}>
-            {selectedGuideEntry.objectives.map((p, i) => (
-              <li key={i} style={{ display: "flex", gap: 10, fontSize: 15, lineHeight: 1.5, marginBottom: 8, color: isDark ? '#D1D5DB' : '#22262B' }}>
-                <span style={{ color: selectedGuideEntry.color, flexShrink: 0 }}>✓</span>
-                <span>{p}</span>
-              </li>
-            ))}
-          </ul>
-        </>
       )}
 
       {/* Key Takeaways */}
@@ -273,32 +402,45 @@ try {
       {selectedGuideEntry.examples && selectedGuideEntry.examples.length > 0 && (
         <div style={{ marginBottom: 26 }}>
           <div className="fg-sans" style={{ fontSize: 12, color: isDark ? '#9CA3AF' : '#8A8474', textTransform: "uppercase", fontWeight: 700, marginBottom: 8 }}>
-            Practical Examples
+            Practical Examples & Code Snippets
           </div>
-          {selectedGuideEntry.examples.map((ex, i) =>
-            ex.isCode ? (
-              <div key={i} style={{ marginBottom: 12, position: "relative" }}>
+          {selectedGuideEntry.examples.map((ex, i) => {
+            const lang = detectLanguage(ex.text);
+            const executable = isExecutableCode(ex.text);
+
+            return ex.isCode ? (
+              <div key={i} style={{ marginBottom: 14, position: "relative" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#1E2227", padding: "6px 12px", borderTopLeftRadius: 6, borderTopRightRadius: 6, borderBottom: "1px solid #333" }}>
-                  <span style={{ fontSize: 10.5, color: "#9CA3AF", fontFamily: "monospace" }}>JavaScript Example</span>
-                  <button
-                    onClick={() => setActiveCodePreview(ex.text)}
-                    style={{
-                      padding: "2px 8px",
-                      borderRadius: 3,
-                      background: "#059669",
-                      color: "#FFF",
-                      border: "none",
-                      fontSize: 10.5,
-                      fontWeight: 700,
-                      cursor: "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 4
-                    }}
-                  >
-                    <Play size={10} /> ▶ Run Code
-                  </button>
+                  <span style={{ fontSize: 10.5, color: "#9CA3AF", fontFamily: "monospace", display: "flex", alignItems: "center", gap: 4 }}>
+                    <Code size={12} color="#60A5FA" /> {lang} Example
+                  </span>
+                  
+                  {executable ? (
+                    <button
+                      onClick={() => setActiveCodeIndex(activeCodeIndex === i ? null : i)}
+                      style={{
+                        padding: "3px 8px",
+                        borderRadius: 3,
+                        background: activeCodeIndex === i ? "#374151" : "#059669",
+                        color: "#FFF",
+                        border: "none",
+                        fontSize: 10.5,
+                        fontWeight: 700,
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 4
+                      }}
+                    >
+                      <Play size={10} /> {activeCodeIndex === i ? 'Hide Output' : 'Run Script'}
+                    </button>
+                  ) : (
+                    <span style={{ fontSize: 10, color: "#64748B", fontWeight: 600, background: "#111827", padding: "2px 6px", borderRadius: 3 }}>
+                      Reference Code
+                    </span>
+                  )}
                 </div>
+
                 <pre
                   className="fg-mono"
                   style={{
@@ -307,14 +449,31 @@ try {
                     fontSize: 12.5,
                     lineHeight: 1.55,
                     padding: "14px 16px",
-                    borderBottomLeftRadius: 6,
-                    borderBottomRightRadius: 6,
+                    borderBottomLeftRadius: activeCodeIndex === i ? 0 : 6,
+                    borderBottomRightRadius: activeCodeIndex === i ? 0 : 6,
                     overflowX: "auto",
                     margin: 0
                   }}
                 >
                   {ex.text}
                 </pre>
+
+                {/* LIVE INTERACTIVE CONSOLE OUTPUT WINDOW */}
+                {executable && activeCodeIndex === i && (
+                  <div style={{ background: "#0F172A", borderBottomLeftRadius: 6, borderBottomRightRadius: 6, border: "1px solid #334155", borderTop: "none", overflow: "hidden" }}>
+                    <div style={{ background: "#1E293B", padding: "4px 12px", fontSize: 10.5, fontWeight: 700, color: "#94A3B8", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                        <Terminal size={12} color="#10B981" /> Terminal Console Output ({lang})
+                      </span>
+                      <button onClick={() => setActiveCodeIndex(null)} style={{ background: "transparent", border: "none", color: "#94A3B8", cursor: "pointer", fontSize: 10.5 }}>✕ Close</button>
+                    </div>
+                    <iframe
+                      title="Live Code Execution Console"
+                      srcDoc={getIframeSrcDoc(ex.text)}
+                      style={{ width: "100%", height: 115, border: "none", display: "block" }}
+                    />
+                  </div>
+                )}
               </div>
             ) : (
               <p
@@ -332,8 +491,8 @@ try {
               >
                 {ex.text}
               </p>
-            )
-          )}
+            );
+          })}
         </div>
       )}
 
@@ -377,7 +536,7 @@ try {
               Authoritative Sources & Documentation
             </div>
             <span className="fg-sans" style={{ fontSize: 10.5, color: isDark ? '#9CA3AF' : '#8A8474', fontStyle: "italic" }}>
-              🌐 External links require Wi-Fi / Data
+              External documentation links require an active network connection
             </span>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
@@ -396,64 +555,6 @@ try {
                 <span style={{ fontSize: 10, background: isDark ? '#374151' : '#CFC7B0', padding: "1px 5px", borderRadius: 3, textTransform: "uppercase" }}>{l.type}</span>
               </a>
             ))}
-          </div>
-        </div>
-      )}
-
-      {/* INTERACTIVE LIVE CODE RUNNER MODAL */}
-      {activeCodePreview && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: "rgba(0,0,0,0.75)",
-            backdropFilter: "blur(4px)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 99999,
-            padding: 20
-          }}
-          onClick={() => setActiveCodePreview(null)}
-        >
-          <div
-            className="fg-sans"
-            style={{
-              background: "#1E2227",
-              color: "#EDE9DE",
-              borderRadius: 8,
-              maxWidth: 640,
-              width: "100%",
-              padding: 20,
-              boxShadow: "0 14px 32px rgba(0,0,0,0.4)",
-              position: "relative"
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-              <div style={{ fontWeight: 700, fontSize: 15, display: "flex", alignItems: "center", gap: 6 }}>
-                <Play size={16} color="#10B981" /> Interactive Code Runner
-              </div>
-              <button onClick={() => setActiveCodePreview(null)} style={{ background: "transparent", border: "none", color: "#FFF", cursor: "pointer" }}>
-                <X size={18} />
-              </button>
-            </div>
-
-            <pre className="fg-mono" style={{ background: "#14171A", padding: 12, borderRadius: 6, fontSize: 12, color: "#E7E2D3", overflowX: "auto", maxHeight: 180, marginBottom: 14 }}>
-              {activeCodePreview}
-            </pre>
-
-            <div style={{ fontSize: 12, fontWeight: 700, color: "#10B981", marginBottom: 6 }}>
-              Preview Output:
-            </div>
-            <iframe
-              title="Code Preview Sandbox"
-              srcDoc={getIframeSrcDoc(activeCodePreview)}
-              style={{ width: "100%", height: 140, background: "#000", border: "1px solid #333", borderRadius: 6 }}
-            />
           </div>
         </div>
       )}
@@ -484,86 +585,40 @@ try {
               border: `1px solid ${isDark ? '#374151' : '#CFC7B0'}`,
               color: isDark ? '#EDE9DE' : '#22262B',
               borderRadius: 8,
-              maxWidth: 480,
+              maxWidth: 420,
               width: "100%",
-              padding: 24,
-              boxShadow: "0 12px 28px -6px rgba(0,0,0,0.25)",
+              padding: 20,
+              boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.2)",
               position: "relative"
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <button
-              onClick={() => setOfflineModalUrl(null)}
-              style={{ position: "absolute", top: 14, right: 14, border: "none", background: "transparent", cursor: "pointer" }}
-            >
-              <X size={18} color="#5B5A52" />
-            </button>
-
-            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 14 }}>
-              <div style={{ background: "#FEF2F2", padding: 10, borderRadius: "50%", border: "1px solid #FCA5A5" }}>
-                <WifiOff size={24} color="#DC2626" />
-              </div>
-              <div>
-                <h3 style={{ fontSize: 17, fontWeight: 700, color: "#991B1B" }}>
-                  Wi-Fi Connection Required
-                </h3>
-                <span style={{ fontSize: 11, color: isDark ? '#9CA3AF' : '#8A8474', fontWeight: 600 }}>
-                  Offline Mode Active
-                </span>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+              <WifiOff size={22} color="#EF4444" />
+              <div style={{ fontWeight: 700, fontSize: 15, color: isDark ? '#FFF' : '#22262B' }}>
+                Offline Mode Active
               </div>
             </div>
 
-            <p style={{ fontSize: 13, lineHeight: 1.5, color: isDark ? '#D1D5DB' : '#3A3D34', marginBottom: 14 }}>
-              You are currently offline. All <strong>HireReady Dev</strong> topics, interview Q&As, practice timers, and notes are saved locally and accessible 100% offline!
+            <p style={{ fontSize: 13, lineHeight: 1.5, color: isDark ? '#9CA3AF' : '#5B5A52', marginBottom: 16 }}>
+              You are currently offline. External documentation links require an active internet connection.
             </p>
 
-            <div style={{ background: isDark ? '#374151' : '#E3DECD', padding: 12, borderRadius: 6, fontSize: 12, color: isDark ? '#EDE9DE' : '#22262B', marginBottom: 16, borderLeft: "3px solid #33417A" }}>
-              <strong>External Resource:</strong> <span className="fg-mono" style={{ fontSize: 11.5, wordBreak: "break-all" }}>{offlineModalUrl}</span>
-            </div>
-
-            <div style={{ display: "flex", gap: 8 }}>
-              <button
-                onClick={() => {
-                  if (navigator.onLine) {
-                    window.open(offlineModalUrl, '_blank');
-                    setOfflineModalUrl(null);
-                  } else {
-                    alert("Still offline. Please connect to Wi-Fi first!");
-                  }
-                }}
-                style={{
-                  flex: 1,
-                  padding: "9px",
-                  background: "#059669",
-                  color: "#FFF",
-                  border: "none",
-                  borderRadius: 5,
-                  fontWeight: 600,
-                  fontSize: 12.5,
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: 6
-                }}
-              >
-                <Wifi size={14} /> Retry / Open Link
-              </button>
-
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
               <button
                 onClick={() => setOfflineModalUrl(null)}
                 style={{
-                  padding: "9px 14px",
-                  background: "#22262B",
+                  padding: "6px 14px",
+                  background: isDark ? '#374151' : '#22262B',
                   color: "#F8F5EE",
                   border: "none",
-                  borderRadius: 5,
+                  borderRadius: 4,
                   fontWeight: 600,
-                  fontSize: 12.5,
+                  fontSize: 12,
                   cursor: "pointer"
                 }}
               >
-                Study Offline
+                Got It
               </button>
             </div>
           </div>
